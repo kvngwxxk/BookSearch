@@ -12,6 +12,7 @@ import RxCocoa
 class MainViewModel {
 	let apiManager = ApiManager.shared
 	var isAdult: BehaviorRelay<Bool> = .init(value: false)
+	var hasAdult: BehaviorRelay<[Bool]> = .init(value: [])
 	var naverBooks: BehaviorRelay<[NaverBook]> = .init(value: [])
 	var kakaoBooks: PublishRelay<[KakaoBook]> = PublishRelay()
 	let disposeBag = DisposeBag()
@@ -20,7 +21,11 @@ class MainViewModel {
 			guard let self = self else { return }
 			self.naverBooks.accept(books)
 		}).disposed(by: disposeBag)
-		
+	}
+	
+	func requestAdult(query: String) {
+		let bool = apiManager.requestAdult(query: query)
+		hasAdult.accept(bool)
 	}
 	
 	func requestKakaoBookInfo(query: String) {
@@ -28,6 +33,5 @@ class MainViewModel {
 			guard let self = self else { return }
 			self.kakaoBooks.accept(books)
 		}).disposed(by: disposeBag)
-		
 	}
 }

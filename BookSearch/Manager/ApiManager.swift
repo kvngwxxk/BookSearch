@@ -11,12 +11,14 @@ import RxSwift
 
 class ApiManager {
 	static let shared = ApiManager()
+	// MARK: NAVER
 	func requestNaverBookInfo(query: String) -> Observable<[NaverBook]> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
 		let NAVER_CLIENT_SECRET: String = infoDictionary["NaverClientSecret"] as! String
 		let display = 20
 		let start = 1
+		let url = "https://openapi.naver.com/v1/search/book.json"
 		let parameters: Parameters = [
 			"query": query,
 			"display": display,
@@ -26,8 +28,8 @@ class ApiManager {
 			"X-Naver-Client-Id": NAVER_CLIENT_ID,
 			"X-Naver-Client-Secret": NAVER_CLIENT_SECRET
 		]
-		let url = "https://openapi.naver.com/v1/search/book.json"
 		return Observable<[NaverBook]>.create { observer in
+			
 			let request = AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
 				.responseData { response in
 					var books = [NaverBook]()
@@ -60,11 +62,49 @@ class ApiManager {
 			}
 		}
 	}
+	
+	func requestAdult(query: String) -> [Bool] {
+		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
+		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
+		let NAVER_CLIENT_SECRET: String = infoDictionary["NaverClientSecret"] as! String
+		let url = "https://openapi.naver.com/v1/search/adult.json"
+		let separatedText = query.components(separatedBy: " ")
+		let headers: HTTPHeaders = [
+			"X-Naver-Client-Id": NAVER_CLIENT_ID,
+			"X-Naver-Client-Secret": NAVER_CLIENT_SECRET
+		]
+		var bool = [Bool]()
+		for index in 0..<separatedText.count {
+			let runLoop = CFRunLoopGetCurrent()
+			AF.request(url, method: .get, parameters: ["query": separatedText[index]], encoding: URLEncoding.queryString, headers: headers).responseData { response in
+				do {
+					if let data = response.value {
+						let json = try JSONDecoder().decode(Adult.self, from: data)
+						if json.adult == "0" {
+							bool.append(false)
+						} else {
+							bool.append(true)
+						}
+					}
+					print(bool)
+					CFRunLoopStop(runLoop)
+				} catch {
+					print(error)
+				}
+			}
+			CFRunLoopRun()
+		}
+		return bool
+	}
+	
+	
+	// MARK: KAKAO
 	func requestKakaoBookInfo(query: String) -> Observable<[KakaoBook]> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let KAKAO_API_KEY: String = infoDictionary["KakaoApiKey"] as! String
 		let size = 20
 		let page = 1
+		let url = "https://dapi.kakao.com/v3/search/book"
 		let parameters: Parameters = [
 			"query": query,
 			"size": size,
@@ -73,8 +113,8 @@ class ApiManager {
 		let headers: HTTPHeaders = [
 			"Authorization": "KakaoAK \(KAKAO_API_KEY)"
 		]
-		let url = "https://dapi.kakao.com/v3/search/book"
 		return Observable<[KakaoBook]>.create { observer in
+			
 			let request = AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
 				.responseData { response in
 					var books = [KakaoBook]()

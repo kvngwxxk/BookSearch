@@ -157,11 +157,23 @@ class MainViewController: UIViewController {
 		
 		self.searchButton.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			self.viewModel.naverBooks.accept([])
-			self.viewModel.requestNaverBookInfo(query: self.searchBar.text ?? "")
-			self.viewModel.requestKakaoBookInfo(query: self.searchBar.text ?? "")
-			
+			let text = self.searchBar.text ?? ""
+			if !self.isChecked {
+				self.viewModel.requestAdult(query: text)
+				self.viewModel.hasAdult.subscribe(onNext: { bool in
+					let text = self.searchBar.text ?? ""
+					if bool.contains(true) {
+						self.showToast(message: "성인 단어 포함")
+					} else {
+						self.viewModel.naverBooks.accept([])
+						self.viewModel.requestNaverBookInfo(query: text)
+						self.viewModel.requestKakaoBookInfo(query: text)
+					}
+				}).disposed(by: self.disposeBag)
+			}
 		}.disposed(by: disposeBag)
+		
+		
 		
 		self.viewModel.naverBooks.subscribe(onNext: { books in
 			self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
@@ -188,8 +200,24 @@ class MainViewController: UIViewController {
 			self.pageViewController.viewModel.currentTable.accept("kakao")
 			
 		}.disposed(by: disposeBag)
-		
-		
+	}
+	
+	func showToast(message : String, font: UIFont = UIFont.systemFont(ofSize: 14.0)) {
+		let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 100, y: self.view.frame.size.height-100, width: 150, height: 35))
+		toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+		toastLabel.textColor = UIColor.white
+		toastLabel.font = font
+		toastLabel.textAlignment = .center;
+		toastLabel.text = message
+		toastLabel.alpha = 1.0
+		toastLabel.layer.cornerRadius = 10;
+		toastLabel.clipsToBounds  =  true
+		self.view.addSubview(toastLabel)
+		UIView.animate(withDuration: 2.0, delay: 0.1, options: .curveEaseOut, animations: {
+			toastLabel.alpha = 0.0
+		}, completion: {(isCompleted) in
+			toastLabel.removeFromSuperview()
+		})
 	}
 }
 

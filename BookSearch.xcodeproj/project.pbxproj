@@ -17,6 +17,7 @@
 		089109D0292B3F0F00E899A4 /* NaverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109CF292B3F0F00E899A4 /* NaverViewModel.swift */; };
 		089109D2292B3F2A00E899A4 /* KakaoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D1292B3F2A00E899A4 /* KakaoViewModel.swift */; };
 		089109D4292B599100E899A4 /* KakaoReponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D3292B599100E899A4 /* KakaoReponse.swift */; };
+		089109D6292B673100E899A4 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D5292B673100E899A4 /* Utility.swift */; };
 		0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D6292722AC00C3633D /* AppDelegate.swift */; };
 		0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D8292722AC00C3633D /* SceneDelegate.swift */; };
 		0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3DA292722AC00C3633D /* MainViewController.swift */; };
@@ -29,7 +30,7 @@
 		0898F40D2927482F00C3633D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F40C2927482F00C3633D /* DetailViewController.swift */; };
 		0898F41029274B1E00C3633D /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F40F29274B1E00C3633D /* MainViewModel.swift */; };
 		0898F413292755D100C3633D /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F412292755D100C3633D /* ApiManager.swift */; };
-		0898F4152927577D00C3633D /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F4142927577D00C3633D /* Book.swift */; };
+		0898F4152927577D00C3633D /* Adult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F4142927577D00C3633D /* Adult.swift */; };
 		0898F41829275D6700C3633D /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F41729275D6700C3633D /* DetailViewModel.swift */; };
 		0898F41D292767CE00C3633D /* PageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F41C292767CE00C3633D /* PageViewCell.swift */; };
 		0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F42129277BC500C3633D /* UITableView+Extension.swift */; };
@@ -67,6 +68,7 @@
 		089109CF292B3F0F00E899A4 /* NaverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverViewModel.swift; sourceTree = "<group>"; };
 		089109D1292B3F2A00E899A4 /* KakaoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoViewModel.swift; sourceTree = "<group>"; };
 		089109D3292B599100E899A4 /* KakaoReponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoReponse.swift; sourceTree = "<group>"; };
+		089109D5292B673100E899A4 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		0898F3D3292722AC00C3633D /* BookSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0898F3D6292722AC00C3633D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0898F3D8292722AC00C3633D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,7 +85,7 @@
 		0898F40C2927482F00C3633D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0898F40F29274B1E00C3633D /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		0898F412292755D100C3633D /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
-		0898F4142927577D00C3633D /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		0898F4142927577D00C3633D /* Adult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adult.swift; sourceTree = "<group>"; };
 		0898F41729275D6700C3633D /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		0898F41C292767CE00C3633D /* PageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewCell.swift; sourceTree = "<group>"; };
 		0898F42129277BC500C3633D /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
@@ -130,7 +132,7 @@
 		0819C8BE292B0A5600665DED /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0898F4142927577D00C3633D /* Book.swift */,
+				0898F4142927577D00C3633D /* Adult.swift */,
 				0819C8C6292B136000665DED /* Naver */,
 				0819C8C7292B136800665DED /* Kakao */,
 			);
@@ -249,6 +251,7 @@
 		0898F41629275CB200C3633D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				089109D5292B673100E899A4 /* Utility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -532,7 +535,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0819C8C9292B19AD00665DED /* UITextField+Extension.swift in Sources */,
-				0898F4152927577D00C3633D /* Book.swift in Sources */,
+				0898F4152927577D00C3633D /* Adult.swift in Sources */,
 				089109D2292B3F2A00E899A4 /* KakaoViewModel.swift in Sources */,
 				0819C8C1292B12A500665DED /* NaverResponse.swift in Sources */,
 				0898F3E1292722AC00C3633D /* BookSearch.xcdatamodeld in Sources */,
@@ -547,6 +550,7 @@
 				0898F413292755D100C3633D /* ApiManager.swift in Sources */,
 				0898F40D2927482F00C3633D /* DetailViewController.swift in Sources */,
 				0819C8BB292B052A00665DED /* PageViewModel.swift in Sources */,
+				089109D6292B673100E899A4 /* Utility.swift in Sources */,
 				0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */,
 				0898F42429277CE000C3633D /* PageViewController.swift in Sources */,
 				089109D4292B599100E899A4 /* KakaoReponse.swift in Sources */,
