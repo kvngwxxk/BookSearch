@@ -11,8 +11,8 @@ import RxSwift
 import RxCocoa
 
 class PageViewController: UIPageViewController {
-	let naverTableViewController: NaverViewController
-	let kakaoTableViewController: KakaoViewController
+	let naverViewController: NaverViewController
+	let kakaoViewController: KakaoViewController
 	var tableViewControllers: [UIViewController]
 	var viewModel = PageViewModel()
 	
@@ -26,9 +26,9 @@ class PageViewController: UIPageViewController {
 	}
 	
 	init() {
-		naverTableViewController = NaverViewController()
-		kakaoTableViewController = KakaoViewController()
-		tableViewControllers = [naverTableViewController, kakaoTableViewController]
+		naverViewController = NaverViewController()
+		kakaoViewController = KakaoViewController()
+		tableViewControllers = [naverViewController, kakaoViewController]
 		super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
 		self.view.layer.borderColor = UIColor.gray.cgColor
 		self.view.layer.borderWidth = 0.3

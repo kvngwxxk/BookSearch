@@ -7,9 +7,13 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 class NaverViewController: UIViewController {
+	let viewModel = NaverViewModel()
 	let table = UITableView()
+	let disposeBag = DisposeBag()
+	var bookList = [NaverBook]()
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.table.backgroundColor = .systemGray5
@@ -17,6 +21,7 @@ class NaverViewController: UIViewController {
 		table.delegate = self
 		table.registerCell(cellType: PageViewCell.self, reuseIdentifier: "PageViewCell")
 		setAutoLayout()
+		setBinding()
 	}
 	
 	private func setAutoLayout() {
@@ -26,21 +31,38 @@ class NaverViewController: UIViewController {
 			make.height.equalTo(self.view)
 		}
 	}
+	
+	private func setBinding() {
+		viewModel.naverTable.bind { [weak self] books in
+			guard let self = self else { return }
+			self.bookList = books
+			self.table.reloadData()
+		}.disposed(by: disposeBag)
+	}
 }
 
 extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 20
+		if bookList.count > 20 {
+			return 20
+		} else {
+			return bookList.count
+		}
+		
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let title = "naver title"
-		let author = "naver author"
-		let pubDate = "20220101"
 		let cell: PageViewCell = tableView.dequeueCell(reuseIdentifier: "PageViewCell", indexPath: indexPath)
-		cell.idLabel.text = String(indexPath.row+1)
-		cell.contentLabel.text = "[\(title)]/[\(author)] - [\(pubDate)]"
-		return cell
+		if bookList.isEmpty {
+			return cell
+		} else {
+			let title = bookList[indexPath.row].title
+			let author = bookList[indexPath.row].author
+			let pubDate = bookList[indexPath.row].pubDate
+			cell.idLabel.text = String(indexPath.row+1)
+			cell.contentLabel.text = "[\(title)]/[\(author)] - [\(pubDate)]"
+			return cell
+		}
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

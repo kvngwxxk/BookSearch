@@ -157,10 +157,14 @@ class MainViewController: UIViewController {
 		
 		self.searchButton.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			self.viewModel.query.accept(self.searchBar.text ?? "")
-			self.viewModel.requestNaverBookInfo(query: self.viewModel.query.value)
-			print(self.viewModel.query.value)
+			self.viewModel.naverBooks.accept([])
+			self.viewModel.requestNaverBookInfo(query: self.searchBar.text ?? "")
+			
 		}.disposed(by: disposeBag)
+		
+		self.viewModel.naverBooks.subscribe(onNext: { books in
+			self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
+		}).disposed(by: disposeBag)
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
@@ -179,6 +183,8 @@ class MainViewController: UIViewController {
 			self.pageViewController.viewModel.currentTable.accept("kakao")
 			
 		}.disposed(by: disposeBag)
+		
+		
 	}
 }
 
