@@ -22,8 +22,8 @@ class KakaoViewController: UIViewController {
 	private func setAutoLayout() {
 		self.view.addSubview(table)
 		table.snp.makeConstraints { make in
-			make.width.equalTo(self.view.frame.width)
-			make.height.equalTo(self.view.frame.height)
+			make.width.equalTo(self.view)
+			make.height.equalTo(self.view)
 		}
 	}
 }
@@ -41,5 +41,9 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 		cell.idLabel.text = String(1)
 		cell.contentLabel.text = "[\(title)]/[\(author)] - [\(pubDate)]"
 		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		print(indexPath.row)
 	}
 }

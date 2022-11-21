@@ -163,7 +163,6 @@ class MainViewController: UIViewController {
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			print(self.pageViewController.viewModel.currentTable.value)
 			if self.pageViewController.viewModel.currentTable.value == "kakao" {
 				self.pageViewController.goToPreviousPage()
 			}
