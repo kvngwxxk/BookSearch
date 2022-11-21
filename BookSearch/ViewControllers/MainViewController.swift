@@ -159,11 +159,16 @@ class MainViewController: UIViewController {
 			guard let self = self else { return }
 			self.viewModel.naverBooks.accept([])
 			self.viewModel.requestNaverBookInfo(query: self.searchBar.text ?? "")
+			self.viewModel.requestKakaoBookInfo(query: self.searchBar.text ?? "")
 			
 		}.disposed(by: disposeBag)
 		
 		self.viewModel.naverBooks.subscribe(onNext: { books in
 			self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
+		}).disposed(by: disposeBag)
+		
+		self.viewModel.kakaoBooks.subscribe(onNext: { books in
+			self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
 		}).disposed(by: disposeBag)
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in

@@ -15,18 +15,19 @@ class MainViewModel {
 	var naverBooks: BehaviorRelay<[NaverBook]> = .init(value: [])
 	var kakaoBooks: PublishRelay<[KakaoBook]> = PublishRelay()
 	let disposeBag = DisposeBag()
-	let semaphore = DispatchSemaphore(value: 1)
 	func requestNaverBookInfo(query: String) {
 		apiManager.requestNaverBookInfo(query: query).subscribe(onNext: { [weak self] books in
 			guard let self = self else { return }
-			self.semaphore.signal()
 			self.naverBooks.accept(books)
 		}).disposed(by: disposeBag)
 		
-		self.semaphore.wait()
 	}
 	
 	func requestKakaoBookInfo(query: String) {
-		// TODO: Kakao REST API 호출
+		apiManager.requestKakaoBookInfo(query: query).subscribe(onNext: { [weak self] books in
+			guard let self = self else { return }
+			self.kakaoBooks.accept(books)
+		}).disposed(by: disposeBag)
+		
 	}
 }

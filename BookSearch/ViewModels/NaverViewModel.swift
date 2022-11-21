@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+
 class NaverViewModel {
 	var naverTable: BehaviorRelay<[NaverBook]> = .init(value: [])
 }

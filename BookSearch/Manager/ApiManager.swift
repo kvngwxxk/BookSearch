@@ -49,6 +49,53 @@ class ApiManager {
 							}
 						}
 						
+						observer.onNext(books)
+					case .failure(let error):
+						observer.onError(error)
+					}
+					observer.onCompleted()
+				}
+			return Disposables.create {
+				request.cancel()
+			}
+		}
+	}
+	func requestKakaoBookInfo(query: String) -> Observable<[KakaoBook]> {
+		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
+		let KAKAO_API_KEY: String = infoDictionary["KakaoApiKey"] as! String
+		let size = 20
+		let page = 1
+		let parameters: Parameters = [
+			"query": query,
+			"size": size,
+			"page": page
+		]
+		let headers: HTTPHeaders = [
+			"Authorization": "KakaoAK \(KAKAO_API_KEY)"
+		]
+		let url = "https://dapi.kakao.com/v3/search/book"
+		return Observable<[KakaoBook]>.create { observer in
+			let request = AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
+				.responseData { response in
+					var books = [KakaoBook]()
+					switch response.result {
+					case .success(_):
+						if let data = response.value {
+							do {
+								let json = try JSONDecoder().decode(KakaoResponse.self, from: data)
+								print(json.documents)
+								if json.documents.isEmpty {
+									books = []
+								} else {
+									for i in 0..<json.documents.count {
+										books.append(json.documents[i])
+									}
+								}
+							} catch {
+								print(error)
+							}
+						}
+						
 						print(books)
 						observer.onNext(books)
 					case .failure(let error):

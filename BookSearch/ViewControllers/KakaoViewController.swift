@@ -13,7 +13,7 @@ class KakaoViewController: UIViewController {
 	let viewModel = KakaoViewModel()
 	let table = UITableView()
 	let disposeBag = DisposeBag()
-	let bookList = [KakaoBook]()
+	var bookList = [KakaoBook]()
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.table.backgroundColor = .systemGray5
@@ -21,6 +21,7 @@ class KakaoViewController: UIViewController {
 		table.delegate = self
 		table.registerCell(cellType: PageViewCell.self, reuseIdentifier: "PageViewCell")
 		setAutoLayout()
+		setBinding()
 	}
 	
 	private func setAutoLayout() {
@@ -29,6 +30,14 @@ class KakaoViewController: UIViewController {
 			make.width.equalTo(self.view)
 			make.height.equalTo(self.view)
 		}
+	}
+	
+	private func setBinding() {
+		viewModel.kakaoTable.bind { [weak self] books in
+			guard let self = self else { return }
+			self.bookList = books
+			self.table.reloadData()
+		}.disposed(by: disposeBag)
 	}
 }
 
@@ -47,10 +56,10 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 			return cell
 		} else {
 			let title = bookList[indexPath.row].title
-			let author = bookList[indexPath.row].authors
+			let author = bookList[indexPath.row].authors.first ?? ""
 			let pubDate = bookList[indexPath.row].dateTime
 			cell.idLabel.text = String(indexPath.row+1)
-			cell.contentLabel.text = "[\(title)]/[\(author)] - [\(pubDate)]"
+			cell.contentLabel.text = "[\(title)]/[\(String(describing: author))] - [\(pubDate)]"
 			return cell
 		}
 		

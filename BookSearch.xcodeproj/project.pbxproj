@@ -16,6 +16,7 @@
 		0819C8C9292B19AD00665DED /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8C8292B19AD00665DED /* UITextField+Extension.swift */; };
 		089109D0292B3F0F00E899A4 /* NaverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109CF292B3F0F00E899A4 /* NaverViewModel.swift */; };
 		089109D2292B3F2A00E899A4 /* KakaoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D1292B3F2A00E899A4 /* KakaoViewModel.swift */; };
+		089109D4292B599100E899A4 /* KakaoReponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D3292B599100E899A4 /* KakaoReponse.swift */; };
 		0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D6292722AC00C3633D /* AppDelegate.swift */; };
 		0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D8292722AC00C3633D /* SceneDelegate.swift */; };
 		0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3DA292722AC00C3633D /* MainViewController.swift */; };
@@ -65,6 +66,7 @@
 		0819C8C8292B19AD00665DED /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		089109CF292B3F0F00E899A4 /* NaverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverViewModel.swift; sourceTree = "<group>"; };
 		089109D1292B3F2A00E899A4 /* KakaoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoViewModel.swift; sourceTree = "<group>"; };
+		089109D3292B599100E899A4 /* KakaoReponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoReponse.swift; sourceTree = "<group>"; };
 		0898F3D3292722AC00C3633D /* BookSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0898F3D6292722AC00C3633D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0898F3D8292722AC00C3633D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				0819C8C2292B12AE00665DED /* KakaoBook.swift */,
+				089109D3292B599100E899A4 /* KakaoReponse.swift */,
 			);
 			path = Kakao;
 			sourceTree = "<group>";
@@ -546,6 +549,7 @@
 				0819C8BB292B052A00665DED /* PageViewModel.swift in Sources */,
 				0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */,
 				0898F42429277CE000C3633D /* PageViewController.swift in Sources */,
+				089109D4292B599100E899A4 /* KakaoReponse.swift in Sources */,
 				0898F41029274B1E00C3633D /* MainViewModel.swift in Sources */,
 				0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */,
 				0819C8C3292B12AE00665DED /* KakaoBook.swift in Sources */,
