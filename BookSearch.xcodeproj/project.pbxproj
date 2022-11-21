@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0819C8B7292AFE8A00665DED /* NaverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8B6292AFE8A00665DED /* NaverViewController.swift */; };
 		0819C8B9292AFE9100665DED /* KakaoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8B8292AFE9100665DED /* KakaoViewController.swift */; };
+		0819C8BB292B052A00665DED /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8BA292B052A00665DED /* PageViewModel.swift */; };
 		0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D6292722AC00C3633D /* AppDelegate.swift */; };
 		0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D8292722AC00C3633D /* SceneDelegate.swift */; };
 		0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3DA292722AC00C3633D /* MainViewController.swift */; };
@@ -51,6 +52,7 @@
 /* Begin PBXFileReference section */
 		0819C8B6292AFE8A00665DED /* NaverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverViewController.swift; sourceTree = "<group>"; };
 		0819C8B8292AFE9100665DED /* KakaoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoViewController.swift; sourceTree = "<group>"; };
+		0819C8BA292B052A00665DED /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
 		0898F3D3292722AC00C3633D /* BookSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0898F3D6292722AC00C3633D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0898F3D8292722AC00C3633D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +113,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0819C8BE292B0A5600665DED /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0898F4142927577D00C3633D /* Book.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0819C8BF292B0A5F00665DED /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				0898F412292755D100C3633D /* ApiManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		0898F3CA292722AC00C3633D = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +154,8 @@
 		0898F3D5292722AC00C3633D /* BookSearch */ = {
 			isa = PBXGroup;
 			children = (
+				0819C8BF292B0A5F00665DED /* Manager */,
+				0819C8BE292B0A5600665DED /* Model */,
 				0898F42029277BAA00C3633D /* Extensions */,
 				0898F4192927626000C3633D /* View */,
 				0898F41629275CB200C3633D /* Utilities */,
@@ -143,8 +163,6 @@
 				0898F40B2927482200C3633D /* ViewControllers */,
 				0898F3D6292722AC00C3633D /* AppDelegate.swift */,
 				0898F3D8292722AC00C3633D /* SceneDelegate.swift */,
-				0898F412292755D100C3633D /* ApiManager.swift */,
-				0898F4142927577D00C3633D /* Book.swift */,
 				0898F3E2292722AE00C3633D /* Assets.xcassets */,
 				0898F3E4292722AE00C3633D /* LaunchScreen.storyboard */,
 				0898F3E7292722AE00C3633D /* Info.plist */,
@@ -187,6 +205,7 @@
 			children = (
 				0898F40F29274B1E00C3633D /* MainViewModel.swift */,
 				0898F41729275D6700C3633D /* DetailViewModel.swift */,
+				0819C8BA292B052A00665DED /* PageViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -485,6 +504,7 @@
 				0819C8B9292AFE9100665DED /* KakaoViewController.swift in Sources */,
 				0898F413292755D100C3633D /* ApiManager.swift in Sources */,
 				0898F40D2927482F00C3633D /* DetailViewController.swift in Sources */,
+				0819C8BB292B052A00665DED /* PageViewModel.swift in Sources */,
 				0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */,
 				0898F42429277CE000C3633D /* PageViewController.swift in Sources */,
 				0898F41029274B1E00C3633D /* MainViewModel.swift in Sources */,

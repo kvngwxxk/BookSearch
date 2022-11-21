@@ -7,11 +7,14 @@
 
 import Foundation
 import UIKit
+import RxSwift
+import RxCocoa
 
 class PageViewController: UIPageViewController {
 	let naverTableViewController: NaverViewController
 	let kakaoTableViewController: KakaoViewController
 	var tableViewControllers: [UIViewController]
+	var viewModel = PageViewModel()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -41,7 +44,11 @@ class PageViewController: UIPageViewController {
 extension PageViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 		guard let index = tableViewControllers.firstIndex(of: viewController) else {return nil}
-		
+		if tableViewControllers[index] is NaverViewController {
+			viewModel.currentTable.accept("naver")
+		} else {
+			viewModel.currentTable.accept("kakao")
+		}
 		let previousIndex = index - 1
 		
 		if(previousIndex < 0){
@@ -56,7 +63,11 @@ extension PageViewController: UIPageViewControllerDelegate, UIPageViewController
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 		guard let index = tableViewControllers.firstIndex(of: viewController) else {return nil}
-		
+		if tableViewControllers[index] is NaverViewController {
+			viewModel.currentTable.accept("naver")
+		} else {
+			viewModel.currentTable.accept("kakao")
+		}
 		let nextIndex = index + 1
 		
 		if(nextIndex >= tableViewControllers.count){
@@ -73,3 +84,20 @@ extension PageViewController: UIPageViewControllerDelegate, UIPageViewController
 	
 }
 
+extension UIPageViewController {
+	func goToNextPage(animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
+		if let currentViewController = viewControllers?[0] {
+			if let nextPage = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) {
+				setViewControllers([nextPage], direction: .forward, animated: animated, completion: completion)
+			}
+		}
+	}
+
+	func goToPreviousPage(animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
+		if let currentViewController = viewControllers?[0] {
+			if let previousPage = dataSource?.pageViewController(self, viewControllerBefore: currentViewController){
+				setViewControllers([previousPage], direction: .reverse, animated: true, completion: completion)
+			}
+		}
+	}
+}

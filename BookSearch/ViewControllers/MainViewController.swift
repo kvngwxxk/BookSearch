@@ -83,7 +83,10 @@ class MainViewController: UIViewController {
 		self.view.addSubview(pageView)
 		self.view.addSubview(naverTab)
 		self.view.addSubview(kakaoTab)
-		self.view.addSubview(pageViewController.view)
+		
+		addChild(pageViewController)
+		pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
+		self.pageView.addSubview(pageViewController.view)
 		
 		searchBar.snp.makeConstraints { make in
 			make.top.equalTo(self.view.safeAreaLayoutGuide).offset(20)
@@ -154,11 +157,30 @@ class MainViewController: UIViewController {
 		
 		self.searchButton.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-//			self.navigationController?.pushViewController(DetailViewController(book: Book(title: "title", description: "description", link: "link", isbn: "isbn", pubDate: "pubDate", author: "author", publisher: "publisher", price: 0, thumbnail: "thumbnail", status: "status")), animated: true)
 			self.viewModel.query.accept(self.searchBar.text ?? "")
 			print(self.viewModel.query.value)
 		}.disposed(by: disposeBag)
+		
+		self.naverTab.rx.tap.bind { [weak self] _ in
+			guard let self = self else { return }
+			print(self.pageViewController.viewModel.currentTable.value)
+			if self.pageViewController.viewModel.currentTable.value == "kakao" {
+				self.pageViewController.goToPreviousPage()
+			}
+			self.pageViewController.viewModel.currentTable.accept("naver")
+			
+		}.disposed(by: disposeBag)
+		
+		self.kakaoTab.rx.tap.bind { [weak self] _ in
+			guard let self = self else { return }
+			if self.pageViewController.viewModel.currentTable.value == "naver" {
+				self.pageViewController.goToNextPage()
+			}
+			self.pageViewController.viewModel.currentTable.accept("kakao")
+			
+		}.disposed(by: disposeBag)
 	}
+	
 	
 	
 }
