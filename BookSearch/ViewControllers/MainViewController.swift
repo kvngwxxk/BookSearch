@@ -157,20 +157,28 @@ class MainViewController: UIViewController {
 		
 		self.searchButton.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			let text = self.searchBar.text ?? ""
-			if !self.isChecked {
-				self.viewModel.requestAdult(query: text)
-				self.viewModel.hasAdult.subscribe(onNext: { bool in
-					let text = self.searchBar.text ?? ""
-					if bool.contains(true) {
-						self.showToast(message: "성인 단어 포함")
-					} else {
-						self.viewModel.naverBooks.accept([])
-						self.viewModel.requestNaverBookInfo(query: text)
-						self.viewModel.requestKakaoBookInfo(query: text)
-					}
-				}).disposed(by: self.disposeBag)
+			self.viewModel.naverBooks.accept([])
+			self.viewModel.kakaoBooks.accept([])
+			if let text = self.searchBar.text, !text.isEmpty {
+				if !self.isChecked {
+					self.viewModel.requestAdult(query: self.searchBar.text ?? "")
+					self.viewModel.hasAdult.subscribe(onNext: { bool in
+						let text = self.searchBar.text ?? ""
+						if bool.contains(true) {
+							self.showToast(message: "성인 단어 포함")
+						} else {
+							self.viewModel.requestNaverBookInfo(query: text)
+							self.viewModel.requestKakaoBookInfo(query: text)
+						}
+					}).disposed(by: self.disposeBag)
+				} else {
+					self.viewModel.requestNaverBookInfo(query: text)
+					self.viewModel.requestKakaoBookInfo(query: text)
+				}
+			} else {
+				self.showToast(message: "검색어를 입력해주세요")
 			}
+			
 		}.disposed(by: disposeBag)
 		
 		
@@ -203,7 +211,7 @@ class MainViewController: UIViewController {
 	}
 	
 	func showToast(message : String, font: UIFont = UIFont.systemFont(ofSize: 14.0)) {
-		let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 100, y: self.view.frame.size.height-100, width: 150, height: 35))
+		let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
 		toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
 		toastLabel.textColor = UIColor.white
 		toastLabel.font = font
