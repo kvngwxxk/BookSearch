@@ -38,7 +38,7 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 		let author = "kakao author"
 		let pubDate = "20220101"
 		let cell: PageViewCell = tableView.dequeueCell(reuseIdentifier: "PageViewCell", indexPath: indexPath)
-		cell.idLabel.text = String(1)
+		cell.idLabel.text = String(indexPath.row+1)
 		cell.contentLabel.text = "[\(title)]/[\(author)] - [\(pubDate)]"
 		return cell
 	}

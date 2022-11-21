@@ -158,6 +158,7 @@ class MainViewController: UIViewController {
 		self.searchButton.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
 			self.viewModel.query.accept(self.searchBar.text ?? "")
+			self.viewModel.requestNaverBookInfo(query: self.viewModel.query.value)
 			print(self.viewModel.query.value)
 		}.disposed(by: disposeBag)
 		
@@ -179,16 +180,6 @@ class MainViewController: UIViewController {
 			
 		}.disposed(by: disposeBag)
 	}
-	
-	
-	
 }
 
 
-extension UITextField {
-	func addLeftPadding() {
-		let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: self.frame.height))
-		self.leftView = paddingView
-		self.leftViewMode = ViewMode.always
-	}
-}

@@ -10,6 +10,10 @@
 		0819C8B7292AFE8A00665DED /* NaverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8B6292AFE8A00665DED /* NaverViewController.swift */; };
 		0819C8B9292AFE9100665DED /* KakaoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8B8292AFE9100665DED /* KakaoViewController.swift */; };
 		0819C8BB292B052A00665DED /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8BA292B052A00665DED /* PageViewModel.swift */; };
+		0819C8C1292B12A500665DED /* NaverBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8C0292B12A500665DED /* NaverBook.swift */; };
+		0819C8C3292B12AE00665DED /* KakaoBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8C2292B12AE00665DED /* KakaoBook.swift */; };
+		0819C8C5292B131E00665DED /* NaverItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8C4292B131E00665DED /* NaverItem.swift */; };
+		0819C8C9292B19AD00665DED /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8C8292B19AD00665DED /* UITextField+Extension.swift */; };
 		0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D6292722AC00C3633D /* AppDelegate.swift */; };
 		0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D8292722AC00C3633D /* SceneDelegate.swift */; };
 		0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3DA292722AC00C3633D /* MainViewController.swift */; };
@@ -53,6 +57,10 @@
 		0819C8B6292AFE8A00665DED /* NaverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverViewController.swift; sourceTree = "<group>"; };
 		0819C8B8292AFE9100665DED /* KakaoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoViewController.swift; sourceTree = "<group>"; };
 		0819C8BA292B052A00665DED /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
+		0819C8C0292B12A500665DED /* NaverBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverBook.swift; sourceTree = "<group>"; };
+		0819C8C2292B12AE00665DED /* KakaoBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoBook.swift; sourceTree = "<group>"; };
+		0819C8C4292B131E00665DED /* NaverItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverItem.swift; sourceTree = "<group>"; };
+		0819C8C8292B19AD00665DED /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		0898F3D3292722AC00C3633D /* BookSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0898F3D6292722AC00C3633D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0898F3D8292722AC00C3633D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +125,8 @@
 			isa = PBXGroup;
 			children = (
 				0898F4142927577D00C3633D /* Book.swift */,
+				0819C8C6292B136000665DED /* Naver */,
+				0819C8C7292B136800665DED /* Kakao */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -127,6 +137,23 @@
 				0898F412292755D100C3633D /* ApiManager.swift */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		0819C8C6292B136000665DED /* Naver */ = {
+			isa = PBXGroup;
+			children = (
+				0819C8C0292B12A500665DED /* NaverBook.swift */,
+				0819C8C4292B131E00665DED /* NaverItem.swift */,
+			);
+			path = Naver;
+			sourceTree = "<group>";
+		};
+		0819C8C7292B136800665DED /* Kakao */ = {
+			isa = PBXGroup;
+			children = (
+				0819C8C2292B12AE00665DED /* KakaoBook.swift */,
+			);
+			path = Kakao;
 			sourceTree = "<group>";
 		};
 		0898F3CA292722AC00C3633D = {
@@ -229,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				0898F42129277BC500C3633D /* UITableView+Extension.swift */,
+				0819C8C8292B19AD00665DED /* UITextField+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -494,8 +522,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0819C8C9292B19AD00665DED /* UITextField+Extension.swift in Sources */,
 				0898F4152927577D00C3633D /* Book.swift in Sources */,
+				0819C8C1292B12A500665DED /* NaverBook.swift in Sources */,
 				0898F3E1292722AC00C3633D /* BookSearch.xcdatamodeld in Sources */,
+				0819C8C5292B131E00665DED /* NaverItem.swift in Sources */,
 				0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */,
 				0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */,
 				0898F41829275D6700C3633D /* DetailViewModel.swift in Sources */,
@@ -509,6 +540,7 @@
 				0898F42429277CE000C3633D /* PageViewController.swift in Sources */,
 				0898F41029274B1E00C3633D /* MainViewModel.swift in Sources */,
 				0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */,
+				0819C8C3292B12AE00665DED /* KakaoBook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
