@@ -14,6 +14,8 @@ class MainViewController: UIViewController {
 	let disposeBag = DisposeBag()
 	let viewModel = MainViewModel()
 	var isChecked = false
+	var pageView = UIView()
+	var pageViewController = PageViewController()
 	let searchBar: UITextField = {
 		let textField = UITextField()
 		textField.translatesAutoresizingMaskIntoConstraints = false
@@ -45,10 +47,29 @@ class MainViewController: UIViewController {
 		
 		return label
 	}()
+	let naverTab: UIButton = {
+		let btn = UIButton()
+		btn.translatesAutoresizingMaskIntoConstraints = false
+		btn.setTitle("Naver", for: .normal)
+		btn.layer.borderWidth = 0.3
+		btn.layer.borderColor = UIColor.gray.cgColor
+		btn.setTitleColor(.black, for: .normal)
+		return btn
+	}()
+	let kakaoTab: UIButton = {
+		let btn = UIButton()
+		btn.translatesAutoresizingMaskIntoConstraints = false
+		btn.setTitle("Kakao", for: .normal)
+		btn.layer.borderWidth = 0.3
+		btn.layer.borderColor = UIColor.gray.cgColor
+		btn.setTitleColor(.black, for: .normal)
+		return btn
+	}()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
+		self.navigationItem.title = "Book Search Demo"
 		self.view.backgroundColor = .white
 		setAutoLayout()
 		setBinding()
@@ -59,6 +80,10 @@ class MainViewController: UIViewController {
 		self.view.addSubview(searchButton)
 		self.view.addSubview(checkAdult)
 		self.view.addSubview(adultLabel)
+		self.view.addSubview(pageView)
+		self.view.addSubview(naverTab)
+		self.view.addSubview(kakaoTab)
+		self.view.addSubview(pageViewController.view)
 		
 		searchBar.snp.makeConstraints { make in
 			make.top.equalTo(self.view.safeAreaLayoutGuide).offset(20)
@@ -84,6 +109,32 @@ class MainViewController: UIViewController {
 			make.width.equalTo(15)
 			make.height.equalTo(17)
 		}
+		pageView.snp.makeConstraints { make in
+			make.top.equalTo(self.searchBar.snp.bottom).offset(20)
+			make.bottom.equalTo(self.view.safeAreaLayoutGuide).offset(-10)
+			make.leading.equalTo(self.view.safeAreaLayoutGuide).offset(20)
+			make.trailing.equalTo(self.view.safeAreaLayoutGuide).offset(-20)
+		}
+		
+		pageViewController.view.snp.makeConstraints { make in
+			make.top.equalTo(self.naverTab.snp.bottom)
+			make.bottom.equalTo(self.pageView)
+			make.leading.equalTo(self.pageView)
+			make.trailing.equalTo(self.pageView)
+		}
+		
+		naverTab.snp.makeConstraints { make in
+			make.top.equalTo(self.pageView.snp.top)
+			make.bottom.equalTo(pageViewController.view.snp.top)
+			make.leading.equalTo(self.pageView.snp.leading)
+			make.width.equalTo(100)
+		}
+		kakaoTab.snp.makeConstraints { make in
+			make.top.equalTo(self.pageView.snp.top)
+			make.bottom.equalTo(pageViewController.view.snp.top)
+			make.leading.equalTo(self.naverTab.snp.trailing)
+			make.width.equalTo(100)
+		}
 	}
 	
 	private func setBinding() {
@@ -100,8 +151,15 @@ class MainViewController: UIViewController {
 			}
 			self.viewModel.isAdult.accept(self.isChecked)
 		}.disposed(by: disposeBag)
+		
+		self.searchButton.rx.tap.bind { [weak self] _ in
+			guard let self = self else { return }
+//			self.navigationController?.pushViewController(DetailViewController(book: Book(title: "title", description: "description", link: "link", isbn: "isbn", pubDate: "pubDate", author: "author", publisher: "publisher", price: 0, thumbnail: "thumbnail", status: "status")), animated: true)
+			self.viewModel.query.accept(self.searchBar.text ?? "")
+			print(self.viewModel.query.value)
+		}.disposed(by: disposeBag)
 	}
-
+	
 	
 }
 

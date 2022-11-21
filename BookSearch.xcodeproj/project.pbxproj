@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0819C8B7292AFE8A00665DED /* NaverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8B6292AFE8A00665DED /* NaverViewController.swift */; };
+		0819C8B9292AFE9100665DED /* KakaoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819C8B8292AFE9100665DED /* KakaoViewController.swift */; };
 		0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D6292722AC00C3633D /* AppDelegate.swift */; };
 		0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D8292722AC00C3633D /* SceneDelegate.swift */; };
 		0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3DA292722AC00C3633D /* MainViewController.swift */; };
@@ -18,6 +20,12 @@
 		0898F3FD292722AE00C3633D /* BookSearchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3FC292722AE00C3633D /* BookSearchUITestsLaunchTests.swift */; };
 		0898F40D2927482F00C3633D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F40C2927482F00C3633D /* DetailViewController.swift */; };
 		0898F41029274B1E00C3633D /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F40F29274B1E00C3633D /* MainViewModel.swift */; };
+		0898F413292755D100C3633D /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F412292755D100C3633D /* ApiManager.swift */; };
+		0898F4152927577D00C3633D /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F4142927577D00C3633D /* Book.swift */; };
+		0898F41829275D6700C3633D /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F41729275D6700C3633D /* DetailViewModel.swift */; };
+		0898F41D292767CE00C3633D /* PageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F41C292767CE00C3633D /* PageViewCell.swift */; };
+		0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F42129277BC500C3633D /* UITableView+Extension.swift */; };
+		0898F42429277CE000C3633D /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F42329277CE000C3633D /* PageViewController.swift */; };
 		0A6A7E99AD2F0D4260CCAB2B /* Pods_BookSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77E38F135F5B8157A77C2A7 /* Pods_BookSearch.framework */; };
 		215464A92F3D12486BE4B201 /* Pods_BookSearch_BookSearchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1233D6D7B6243E9FA09655EC /* Pods_BookSearch_BookSearchUITests.framework */; };
 		8C30DAAA87FC4D9169128A60 /* Pods_BookSearchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 332E3A8C0C374F4987B7DE11 /* Pods_BookSearchTests.framework */; };
@@ -41,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0819C8B6292AFE8A00665DED /* NaverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverViewController.swift; sourceTree = "<group>"; };
+		0819C8B8292AFE9100665DED /* KakaoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoViewController.swift; sourceTree = "<group>"; };
 		0898F3D3292722AC00C3633D /* BookSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0898F3D6292722AC00C3633D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0898F3D8292722AC00C3633D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +66,12 @@
 		0898F3FC292722AE00C3633D /* BookSearchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSearchUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		0898F40C2927482F00C3633D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0898F40F29274B1E00C3633D /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		0898F412292755D100C3633D /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
+		0898F4142927577D00C3633D /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		0898F41729275D6700C3633D /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		0898F41C292767CE00C3633D /* PageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewCell.swift; sourceTree = "<group>"; };
+		0898F42129277BC500C3633D /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
+		0898F42329277CE000C3633D /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		09CE11C0CBDAF2C6107EB9FD /* Pods-BookSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSearch.debug.xcconfig"; path = "Target Support Files/Pods-BookSearch/Pods-BookSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		1233D6D7B6243E9FA09655EC /* Pods_BookSearch_BookSearchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BookSearch_BookSearchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		152392DA2CBDF78A2C2C0230 /* Pods-BookSearch-BookSearchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSearch-BookSearchUITests.release.xcconfig"; path = "Target Support Files/Pods-BookSearch-BookSearchUITests/Pods-BookSearch-BookSearchUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -120,10 +136,15 @@
 		0898F3D5292722AC00C3633D /* BookSearch */ = {
 			isa = PBXGroup;
 			children = (
+				0898F42029277BAA00C3633D /* Extensions */,
+				0898F4192927626000C3633D /* View */,
+				0898F41629275CB200C3633D /* Utilities */,
 				0898F40E29274B1300C3633D /* ViewModels */,
 				0898F40B2927482200C3633D /* ViewControllers */,
 				0898F3D6292722AC00C3633D /* AppDelegate.swift */,
 				0898F3D8292722AC00C3633D /* SceneDelegate.swift */,
+				0898F412292755D100C3633D /* ApiManager.swift */,
+				0898F4142927577D00C3633D /* Book.swift */,
 				0898F3E2292722AE00C3633D /* Assets.xcassets */,
 				0898F3E4292722AE00C3633D /* LaunchScreen.storyboard */,
 				0898F3E7292722AE00C3633D /* Info.plist */,
@@ -154,6 +175,9 @@
 			children = (
 				0898F3DA292722AC00C3633D /* MainViewController.swift */,
 				0898F40C2927482F00C3633D /* DetailViewController.swift */,
+				0898F42329277CE000C3633D /* PageViewController.swift */,
+				0819C8B6292AFE8A00665DED /* NaverViewController.swift */,
+				0819C8B8292AFE9100665DED /* KakaoViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -162,8 +186,32 @@
 			isa = PBXGroup;
 			children = (
 				0898F40F29274B1E00C3633D /* MainViewModel.swift */,
+				0898F41729275D6700C3633D /* DetailViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		0898F41629275CB200C3633D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		0898F4192927626000C3633D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0898F41C292767CE00C3633D /* PageViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0898F42029277BAA00C3633D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0898F42129277BC500C3633D /* UITableView+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		7838CE96020468B838611883 /* Frameworks */ = {
@@ -427,12 +475,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0898F4152927577D00C3633D /* Book.swift in Sources */,
 				0898F3E1292722AC00C3633D /* BookSearch.xcdatamodeld in Sources */,
 				0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */,
 				0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */,
+				0898F41829275D6700C3633D /* DetailViewModel.swift in Sources */,
+				0898F41D292767CE00C3633D /* PageViewCell.swift in Sources */,
+				0819C8B7292AFE8A00665DED /* NaverViewController.swift in Sources */,
+				0819C8B9292AFE9100665DED /* KakaoViewController.swift in Sources */,
+				0898F413292755D100C3633D /* ApiManager.swift in Sources */,
 				0898F40D2927482F00C3633D /* DetailViewController.swift in Sources */,
 				0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */,
+				0898F42429277CE000C3633D /* PageViewController.swift in Sources */,
 				0898F41029274B1E00C3633D /* MainViewModel.swift in Sources */,
+				0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
