@@ -57,7 +57,7 @@ class NaverViewController: UIViewController {
 extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		if bookList.count >= 20 {
-			viewModel.page.accept(self.viewModel.)
+			viewModel.page.accept(self.viewModel)
 			return 20
 		} else {
 			return bookList.count
