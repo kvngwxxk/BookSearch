@@ -12,12 +12,12 @@ import RxSwift
 class ApiManager {
 	static let shared = ApiManager()
 	// MARK: NAVER 책 검색 API Request
-	func requestNaverBookInfo(query: String) -> Observable<[NaverBook]> {
+	func requestNaverBookInfo(query: String, page: Int) -> Observable<([NaverBook],Int)> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
 		let NAVER_CLIENT_SECRET: String = infoDictionary["NaverClientSecret"] as! String
 		let display = 20
-		let start = 1
+		let start = page
 		let url = "https://openapi.naver.com/v1/search/book.json"
 		let parameters: Parameters = [
 			"query": query,
@@ -28,19 +28,22 @@ class ApiManager {
 			"X-Naver-Client-Id": NAVER_CLIENT_ID,
 			"X-Naver-Client-Secret": NAVER_CLIENT_SECRET
 		]
-		return Observable<[NaverBook]>.create { observer in
+		return Observable<([NaverBook],Int)>.create { observer  in
 			
 			let request = AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
 				.responseData { response in
 					var books = [NaverBook]()
+					var total = 0
 					switch response.result {
 					case .success(_):
 						if let data = response.value {
 							do {
 								print(query)
-								print(String(data: data, encoding: .utf8))
+//								print(String(data: data, encoding: .utf8))
 								let json = try JSONDecoder().decode(NaverResponse.self, from: data)
-								print(json.items)
+//								print(json.items)
+								total = json.total
+								
 								if json.items.isEmpty {
 									books = []
 								} else {
@@ -53,7 +56,7 @@ class ApiManager {
 							}
 						}
 						
-						observer.onNext(books)
+						observer.onNext((books, total))
 					case .failure(let error):
 						observer.onError(error)
 					}
@@ -125,7 +128,7 @@ class ApiManager {
 						}
 						
 					}
-					print(strings)
+//					print(strings)
 					CFRunLoopStop(runLoop)
 				} catch {
 					print(error)
@@ -137,7 +140,7 @@ class ApiManager {
 	}
 	
 	// MARK: KAKAO 책 검색 API Request
-	func requestKakaoBookInfo(query: String) -> Observable<[KakaoBook]> {
+	func requestKakaoBookInfo(query: String) -> Observable<([KakaoBook], Int)> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let KAKAO_API_KEY: String = infoDictionary["KakaoApiKey"] as! String
 		let size = 20
@@ -151,17 +154,19 @@ class ApiManager {
 		let headers: HTTPHeaders = [
 			"Authorization": "KakaoAK \(KAKAO_API_KEY)"
 		]
-		return Observable<[KakaoBook]>.create { observer in
+		return Observable<([KakaoBook], Int)>.create { observer in
 			
 			let request = AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
 				.responseData { response in
 					var books = [KakaoBook]()
+					var total = 0
 					switch response.result {
 					case .success(_):
 						if let data = response.value {
 							do {
 								let json = try JSONDecoder().decode(KakaoResponse.self, from: data)
-								print(json.documents)
+//								print(json.documents)
+								total = json.meta.total_count
 								if json.documents.isEmpty {
 									books = []
 								} else {
@@ -175,7 +180,7 @@ class ApiManager {
 						}
 						
 						print(books)
-						observer.onNext(books)
+						observer.onNext((books, total))
 					case .failure(let error):
 						observer.onError(error)
 					}

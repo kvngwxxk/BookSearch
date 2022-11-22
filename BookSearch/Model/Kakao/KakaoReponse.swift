@@ -9,4 +9,5 @@ import Foundation
 
 struct KakaoResponse: Codable {
 	var documents: [KakaoBook]
+	var meta: KakaoMeta
 }

@@ -17,12 +17,15 @@ class MainViewModel {
 	var correctWords: BehaviorRelay<[String]> = .init(value: [])
 	
 	var naverBooks: BehaviorRelay<[NaverBook]> = .init(value: [])
+	var naverTotal: BehaviorRelay<Int> = .init(value: 0)
 	var kakaoBooks: PublishRelay<[KakaoBook]> = PublishRelay()
+	var kakaoTotal: BehaviorRelay<Int> = .init(value: 0)
 	let disposeBag = DisposeBag()
-	func requestNaverBookInfo(query: String) {
-		apiManager.requestNaverBookInfo(query: query).subscribe(onNext: { [weak self] books in
+	func requestNaverBookInfo(query: String, page: Int) {
+		apiManager.requestNaverBookInfo(query: query, page: page).subscribe(onNext: { [weak self] (books, total) in
 			guard let self = self else { return }
 			self.naverBooks.accept(books)
+			self.naverTotal.accept(total)
 		}).disposed(by: disposeBag)
 	}
 	
@@ -36,10 +39,11 @@ class MainViewModel {
 		correctWords.accept(words)
 	}
 	
-	func requestKakaoBookInfo(query: String) {
-		apiManager.requestKakaoBookInfo(query: query).subscribe(onNext: { [weak self] books in
+	func requestKakaoBookInfo(query: String, page: Int) {
+		apiManager.requestKakaoBookInfo(query: query).subscribe(onNext: { [weak self] (books, total) in
 			guard let self = self else { return }
 			self.kakaoBooks.accept(books)
+			self.kakaoTotal.accept(total)
 		}).disposed(by: disposeBag)
 	}
 }

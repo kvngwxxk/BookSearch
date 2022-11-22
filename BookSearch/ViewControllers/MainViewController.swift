@@ -197,9 +197,18 @@ class MainViewController: UIViewController {
 			self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
 		}).disposed(by: disposeBag)
 		
+		self.viewModel.naverTotal.subscribe(onNext: { [weak self] total in
+			guard let self = self else { return }
+			self.pageViewController.naverViewController.viewModel.total.accept(total)
+		}).disposed(by: disposeBag)
+		
 		self.viewModel.kakaoBooks.subscribe(onNext: { [weak self] books in
 			guard let self = self else { return }
 			self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
+		}).disposed(by: disposeBag)
+		
+		self.viewModel.kakaoTotal.subscribe(onNext: {  [weak self] total in
+			
 		}).disposed(by: disposeBag)
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in
@@ -243,14 +252,17 @@ class MainViewController: UIViewController {
 				if isAdult {
 					self.showToast(message: "성인 단어 포함")
 				} else {
+					// 오타 확인
 					self.viewModel.requestErrata(query: text)
-					self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText)
-					self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText)
+					
+					// 책 검색
+					self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+					self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
 				}
 			} else {
 				self.viewModel.requestErrata(query: text)
-				self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText)
-				self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText)
+				self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+				self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
 			}
 		} else {
 			self.showToast(message: "검색어를 입력해주세요")

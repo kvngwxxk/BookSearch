@@ -14,6 +14,7 @@ class NaverViewController: UIViewController {
 	let table = UITableView()
 	let disposeBag = DisposeBag()
 	var bookList = [NaverBook]()
+	var activityIndicator: LoadMoreActivityIndicator!
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.table.backgroundColor = .systemGray5
@@ -22,6 +23,7 @@ class NaverViewController: UIViewController {
 		table.registerCell(cellType: PageViewCell.self, reuseIdentifier: "PageViewCell")
 		setAutoLayout()
 		setBinding()
+		activityIndicator = LoadMoreActivityIndicator(scrollView: table, spacingFromLastCell: 10, spacingFromLastCellWhenLoadMoreActionStart: 30)
 	}
 	
 	init(viewModel: NaverViewModel) {
@@ -44,15 +46,18 @@ class NaverViewController: UIViewController {
 	private func setBinding() {
 		viewModel.naverTable.bind { [weak self] books in
 			guard let self = self else { return }
+			print(books.map{$0.title})
 			self.bookList = books
 			self.table.reloadData()
 		}.disposed(by: disposeBag)
 	}
+	
 }
 
 extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if bookList.count > 20 {
+		if bookList.count >= 20 {
+			viewModel.page.accept(self.viewModel.)
 			return 20
 		} else {
 			return bookList.count
@@ -78,4 +83,22 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 		self.present(DetailViewController(naverBook: bookList[indexPath.row]), animated: true, completion: nil)
 		print(indexPath.row)
 	}
+	
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		activityIndicator.start {
+			DispatchQueue.global(qos: .utility).async {
+				sleep(1)
+				DispatchQueue.main.async {
+					let main = self.parent?.parent as! MainViewController
+					self.viewModel.page.bind { page in
+						print(page+1)
+						main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page+1)
+						print("invoke")
+					}.disposed(by: self.disposeBag)
+					self.activityIndicator.stop()
+				}
+			}
+		}
+	}
+	
 }

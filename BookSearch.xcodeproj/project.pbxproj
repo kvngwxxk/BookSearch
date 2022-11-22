@@ -17,7 +17,6 @@
 		089109D0292B3F0F00E899A4 /* NaverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109CF292B3F0F00E899A4 /* NaverViewModel.swift */; };
 		089109D2292B3F2A00E899A4 /* KakaoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D1292B3F2A00E899A4 /* KakaoViewModel.swift */; };
 		089109D4292B599100E899A4 /* KakaoReponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D3292B599100E899A4 /* KakaoReponse.swift */; };
-		089109D6292B673100E899A4 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089109D5292B673100E899A4 /* Utility.swift */; };
 		0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D6292722AC00C3633D /* AppDelegate.swift */; };
 		0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3D8292722AC00C3633D /* SceneDelegate.swift */; };
 		0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F3DA292722AC00C3633D /* MainViewController.swift */; };
@@ -36,6 +35,8 @@
 		0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F42129277BC500C3633D /* UITableView+Extension.swift */; };
 		0898F42429277CE000C3633D /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F42329277CE000C3633D /* PageViewController.swift */; };
 		08E5368F292C5072003FABF6 /* Errata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E5368E292C5072003FABF6 /* Errata.swift */; };
+		08E53693292CA03B003FABF6 /* LoadMoreActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E53692292CA03B003FABF6 /* LoadMoreActivityIndicator.swift */; };
+		08E53697292CAFAF003FABF6 /* KakaoMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E53696292CAFAF003FABF6 /* KakaoMeta.swift */; };
 		0A6A7E99AD2F0D4260CCAB2B /* Pods_BookSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77E38F135F5B8157A77C2A7 /* Pods_BookSearch.framework */; };
 		215464A92F3D12486BE4B201 /* Pods_BookSearch_BookSearchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1233D6D7B6243E9FA09655EC /* Pods_BookSearch_BookSearchUITests.framework */; };
 		8C30DAAA87FC4D9169128A60 /* Pods_BookSearchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 332E3A8C0C374F4987B7DE11 /* Pods_BookSearchTests.framework */; };
@@ -69,7 +70,6 @@
 		089109CF292B3F0F00E899A4 /* NaverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverViewModel.swift; sourceTree = "<group>"; };
 		089109D1292B3F2A00E899A4 /* KakaoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoViewModel.swift; sourceTree = "<group>"; };
 		089109D3292B599100E899A4 /* KakaoReponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoReponse.swift; sourceTree = "<group>"; };
-		089109D5292B673100E899A4 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		0898F3D3292722AC00C3633D /* BookSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0898F3D6292722AC00C3633D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0898F3D8292722AC00C3633D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +92,8 @@
 		0898F42129277BC500C3633D /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		0898F42329277CE000C3633D /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		08E5368E292C5072003FABF6 /* Errata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errata.swift; sourceTree = "<group>"; };
+		08E53692292CA03B003FABF6 /* LoadMoreActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreActivityIndicator.swift; sourceTree = "<group>"; };
+		08E53696292CAFAF003FABF6 /* KakaoMeta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoMeta.swift; sourceTree = "<group>"; };
 		09CE11C0CBDAF2C6107EB9FD /* Pods-BookSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSearch.debug.xcconfig"; path = "Target Support Files/Pods-BookSearch/Pods-BookSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		1233D6D7B6243E9FA09655EC /* Pods_BookSearch_BookSearchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BookSearch_BookSearchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		152392DA2CBDF78A2C2C0230 /* Pods-BookSearch-BookSearchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSearch-BookSearchUITests.release.xcconfig"; path = "Target Support Files/Pods-BookSearch-BookSearchUITests/Pods-BookSearch-BookSearchUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 			children = (
 				0819C8C2292B12AE00665DED /* KakaoBook.swift */,
 				089109D3292B599100E899A4 /* KakaoReponse.swift */,
+				08E53696292CAFAF003FABF6 /* KakaoMeta.swift */,
 			);
 			path = Kakao;
 			sourceTree = "<group>";
@@ -254,7 +257,7 @@
 		0898F41629275CB200C3633D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				089109D5292B673100E899A4 /* Utility.swift */,
+				08E53692292CA03B003FABF6 /* LoadMoreActivityIndicator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				0898F3E1292722AC00C3633D /* BookSearch.xcdatamodeld in Sources */,
 				0819C8C5292B131E00665DED /* NaverBook.swift in Sources */,
 				08E5368F292C5072003FABF6 /* Errata.swift in Sources */,
+				08E53693292CA03B003FABF6 /* LoadMoreActivityIndicator.swift in Sources */,
 				0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */,
 				0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */,
 				0898F41829275D6700C3633D /* DetailViewModel.swift in Sources */,
@@ -552,9 +556,9 @@
 				0819C8B9292AFE9100665DED /* KakaoViewController.swift in Sources */,
 				089109D0292B3F0F00E899A4 /* NaverViewModel.swift in Sources */,
 				0898F413292755D100C3633D /* ApiManager.swift in Sources */,
+				08E53697292CAFAF003FABF6 /* KakaoMeta.swift in Sources */,
 				0898F40D2927482F00C3633D /* DetailViewController.swift in Sources */,
 				0819C8BB292B052A00665DED /* PageViewModel.swift in Sources */,
-				089109D6292B673100E899A4 /* Utility.swift in Sources */,
 				0898F3D9292722AC00C3633D /* SceneDelegate.swift in Sources */,
 				0898F42429277CE000C3633D /* PageViewController.swift in Sources */,
 				089109D4292B599100E899A4 /* KakaoReponse.swift in Sources */,
