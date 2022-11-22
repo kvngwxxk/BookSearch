@@ -44,7 +44,12 @@ class KakaoViewController: UIViewController {
 	private func setBinding() {
 		viewModel.kakaoTable.bind { [weak self] books in
 			guard let self = self else { return }
-			self.bookList = books
+			if books.isEmpty {
+				self.bookList = books
+			} else {
+				self.bookList += books
+			}
+			
 			self.table.reloadData()
 		}.disposed(by: disposeBag)
 	}

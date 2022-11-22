@@ -46,8 +46,12 @@ class NaverViewController: UIViewController {
 	private func setBinding() {
 		viewModel.naverTable.bind { [weak self] books in
 			guard let self = self else { return }
-			print(books.map{$0.title})
-			self.bookList = books
+			if books.isEmpty {
+				self.bookList = books
+			} else {
+				self.bookList += books
+			}
+			
 			self.table.reloadData()
 		}.disposed(by: disposeBag)
 	}
@@ -57,8 +61,10 @@ class NaverViewController: UIViewController {
 extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		if bookList.count >= 20 {
-			viewModel.page.accept(self.viewModel)
-			return 20
+			var index = 1
+			var total = viewModel.total.value
+			viewModel.page.accept(bookList.count/20 + 1)
+			return bookList.count
 		} else {
 			return bookList.count
 		}
@@ -89,12 +95,12 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 			DispatchQueue.global(qos: .utility).async {
 				sleep(1)
 				DispatchQueue.main.async {
-					let main = self.parent?.parent as! MainViewController
-					self.viewModel.page.bind { page in
-						print(page+1)
-						main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page+1)
+//					let main = self.parent?.parent as! MainViewController
+//					self.viewModel.page.bind { page in
+//						print(page+1)
+//						main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page+1)
 						print("invoke")
-					}.disposed(by: self.disposeBag)
+//					}.disposed(by: self.disposeBag)
 					self.activityIndicator.stop()
 				}
 			}
