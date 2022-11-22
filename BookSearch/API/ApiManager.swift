@@ -118,7 +118,12 @@ class ApiManager {
 				do {
 					if let data = response.value {
 						let json = try JSONDecoder().decode(Errata.self, from: data)
-						strings.append(json.errata)
+						if !json.errata.isEmpty {
+							strings.append(json.errata)
+						} else {
+							strings.append(separatedText[index])
+						}
+						
 					}
 					print(strings)
 					CFRunLoopStop(runLoop)

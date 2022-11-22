@@ -75,6 +75,7 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.present(DetailViewController(naverBook: bookList[indexPath.row]), animated: true, completion: nil)
 		print(indexPath.row)
 	}
 }

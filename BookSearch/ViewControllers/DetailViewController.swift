@@ -10,16 +10,16 @@ import UIKit
 import SnapKit
 
 class DetailViewController: UIViewController {
-	
-	let viewModel: DetailViewModel
-	
+	let naverBook: NaverBook?
+	let kakaoBook: KakaoBook?
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.view.backgroundColor = .white
 	}
 	
-	init(viewModel: DetailViewModel) {
-		self.viewModel = viewModel
+	init(naverBook: NaverBook? = nil, kakaoBook: KakaoBook? = nil) {
+		self.naverBook = naverBook
+		self.kakaoBook = kakaoBook
 		super.init(nibName: nil, bundle: nil)
 	}
 	

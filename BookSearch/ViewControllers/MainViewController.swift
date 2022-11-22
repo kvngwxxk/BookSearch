@@ -226,6 +226,7 @@ class MainViewController: UIViewController {
 	func searchProcess() {
 		// 결과 초기화
 		isAdult = false
+		correctText = ""
 		self.viewModel.naverBooks.accept([])
 		self.viewModel.kakaoBooks.accept([])
 		while searchBar.text?.last == " " {
@@ -243,13 +244,13 @@ class MainViewController: UIViewController {
 					self.showToast(message: "성인 단어 포함")
 				} else {
 					self.viewModel.requestErrata(query: text)
-					self.viewModel.requestNaverBookInfo(query: correctText)
-					self.viewModel.requestKakaoBookInfo(query: correctText)
+					self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText)
+					self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText)
 				}
 			} else {
 				self.viewModel.requestErrata(query: text)
-				self.viewModel.requestNaverBookInfo(query: correctText)
-				self.viewModel.requestKakaoBookInfo(query: correctText)
+				self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText)
+				self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText)
 			}
 		} else {
 			self.showToast(message: "검색어를 입력해주세요")
