@@ -11,7 +11,7 @@ import RxSwift
 
 class ApiManager {
 	static let shared = ApiManager()
-	// MARK: NAVER
+	// MARK: NAVER 책 검색 API Request
 	func requestNaverBookInfo(query: String) -> Observable<[NaverBook]> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
@@ -63,6 +63,7 @@ class ApiManager {
 		}
 	}
 	
+	// MARK: NAVER 성인 검색어 판별 API Request
 	func requestAdult(query: String) -> [Bool] {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
@@ -97,8 +98,24 @@ class ApiManager {
 		return bool
 	}
 	
+	// MARK: NAVER 오타 변환 API Request
+	func requestErrata(query: String) -> [String] {
+		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
+		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
+		let NAVER_CLIENT_SECRET: String = infoDictionary["NaverClientSecret"] as! String
+		let url = "https://openapi.naver.com/v1/search/errata.json"
+		let separatedText = query.components(separatedBy: " ")
+		let headers: HTTPHeaders = [
+			"X-Naver-Client-Id": NAVER_CLIENT_ID,
+			"X-Naver-Client-Secret": NAVER_CLIENT_SECRET
+		]
+		var strings = [String]()
+		for index in 0..<separatedText.count {
+			
+		}
+	}
 	
-	// MARK: KAKAO
+	// MARK: KAKAO 책 검색 API Request
 	func requestKakaoBookInfo(query: String) -> Observable<[KakaoBook]> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let KAKAO_API_KEY: String = infoDictionary["KakaoApiKey"] as! String
