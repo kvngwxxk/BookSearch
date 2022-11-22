@@ -12,10 +12,10 @@ import RxCocoa
 
 class MainViewController: UIViewController {
 	let disposeBag = DisposeBag()
-	let viewModel = MainViewModel()
+	let viewModel: MainViewModel!
 	var isChecked = false
 	var pageView = UIView()
-	var pageViewController = PageViewController()
+	var pageViewController = PageViewController(viewModel: PageViewModel())
 	let searchBar: UITextField = {
 		let textField = UITextField()
 		textField.translatesAutoresizingMaskIntoConstraints = false
@@ -24,21 +24,18 @@ class MainViewController: UIViewController {
 		textField.addLeftPadding()
 		return textField
 	}()
-	
 	let searchButton: UIButton = {
 		let btn = UIButton(type: .system)
 		btn.translatesAutoresizingMaskIntoConstraints = false
 		btn.setTitle("검색", for: .normal)
 		return btn
 	}()
-	
 	let checkAdult: UIButton = {
 		let checkBox = UIButton()
 		checkBox.translatesAutoresizingMaskIntoConstraints = false
 		checkBox.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
 		return checkBox
 	}()
-	
 	let adultLabel: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
@@ -66,14 +63,30 @@ class MainViewController: UIViewController {
 		return btn
 	}()
 	
+	
+	var correctText: String = ""
+	var isAdult = false
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		self.navigationItem.title = "Book Search Demo"
 		self.view.backgroundColor = .white
 		setAutoLayout()
+		print(self.viewModel.hasAdult.value)
 		setBinding()
 	}
+	
+	init(viewModel: MainViewModel) {
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+		
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 	
 	private func setAutoLayout() {
 		self.view.addSubview(searchBar)
@@ -143,6 +156,7 @@ class MainViewController: UIViewController {
 	private func setBinding() {
 		self.checkAdult.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
+			print(#line)
 			if self.isChecked {
 				self.isChecked = false
 				self.checkAdult.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
@@ -157,42 +171,40 @@ class MainViewController: UIViewController {
 		
 		self.searchButton.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			self.viewModel.naverBooks.accept([])
-			self.viewModel.kakaoBooks.accept([])
-			if let text = self.searchBar.text, !text.isEmpty {
-				if !self.isChecked {
-					self.viewModel.requestAdult(query: self.searchBar.text ?? "")
-					self.viewModel.hasAdult.subscribe(onNext: { bool in
-						let text = self.searchBar.text ?? ""
-						if bool.contains(true) {
-							self.showToast(message: "성인 단어 포함")
-						} else {
-							self.viewModel.requestNaverBookInfo(query: text)
-							self.viewModel.requestKakaoBookInfo(query: text)
-						}
-					}).disposed(by: self.disposeBag)
-				} else {
-					self.viewModel.requestNaverBookInfo(query: text)
-					self.viewModel.requestKakaoBookInfo(query: text)
-				}
-			} else {
-				self.showToast(message: "검색어를 입력해주세요")
-			}
-			
+			print(#line)
+			self.searchProcess()
 		}.disposed(by: disposeBag)
 		
+		self.viewModel.hasAdult.subscribe(onNext: { [weak self] bool in
+			guard let self = self else { return }
+			print(#line)
+			if bool.contains(true) {
+				self.isAdult = true
+			} else {
+				self.isAdult = false
+			}
+		}).disposed(by: self.disposeBag)
 		
+		self.viewModel.correctWords.subscribe(onNext: { [weak self] words in
+			guard let self = self else { return }
+			print(#line)
+			let correctText = words.joined(separator: " ")
+			self.correctText = correctText
+		}).disposed(by: self.disposeBag)
 		
-		self.viewModel.naverBooks.subscribe(onNext: { books in
+		self.viewModel.naverBooks.subscribe(onNext: { [weak self] books in
+			guard let self = self else { return }
 			self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
 		}).disposed(by: disposeBag)
 		
-		self.viewModel.kakaoBooks.subscribe(onNext: { books in
+		self.viewModel.kakaoBooks.subscribe(onNext: { [weak self] books in
+			guard let self = self else { return }
 			self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
 		}).disposed(by: disposeBag)
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
+			print(#line)
 			if self.pageViewController.viewModel.currentTable.value == "kakao" {
 				self.pageViewController.goToPreviousPage()
 			}
@@ -202,12 +214,46 @@ class MainViewController: UIViewController {
 		
 		self.kakaoTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
+			print(#line)
 			if self.pageViewController.viewModel.currentTable.value == "naver" {
 				self.pageViewController.goToNextPage()
 			}
 			self.pageViewController.viewModel.currentTable.accept("kakao")
 			
 		}.disposed(by: disposeBag)
+	}
+	
+	func searchProcess() {
+		// 결과 초기화
+		isAdult = false
+		self.viewModel.naverBooks.accept([])
+		self.viewModel.kakaoBooks.accept([])
+		while searchBar.text?.last == " " {
+			searchBar.text?.removeLast()
+		}
+		while searchBar.text?.first == " " {
+			searchBar.text?.removeFirst()
+		}
+		// 검색어 입력 여부
+		if let text = self.searchBar.text, !text.isEmpty {
+			if !self.isChecked {
+				// 성인 단어 API 호출
+				self.viewModel.requestAdult(query: text)
+				if isAdult {
+					self.showToast(message: "성인 단어 포함")
+				} else {
+					self.viewModel.requestErrata(query: text)
+					self.viewModel.requestNaverBookInfo(query: correctText)
+					self.viewModel.requestKakaoBookInfo(query: correctText)
+				}
+			} else {
+				self.viewModel.requestErrata(query: text)
+				self.viewModel.requestNaverBookInfo(query: correctText)
+				self.viewModel.requestKakaoBookInfo(query: correctText)
+			}
+		} else {
+			self.showToast(message: "검색어를 입력해주세요")
+		}
 	}
 	
 	func showToast(message : String, font: UIFont = UIFont.systemFont(ofSize: 14.0)) {

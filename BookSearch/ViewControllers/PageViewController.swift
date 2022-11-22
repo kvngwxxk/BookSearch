@@ -14,7 +14,7 @@ class PageViewController: UIPageViewController {
 	let naverViewController: NaverViewController
 	let kakaoViewController: KakaoViewController
 	var tableViewControllers: [UIViewController]
-	var viewModel = PageViewModel()
+	var viewModel: PageViewModel
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -25,9 +25,10 @@ class PageViewController: UIPageViewController {
 		}
 	}
 	
-	init() {
-		naverViewController = NaverViewController()
-		kakaoViewController = KakaoViewController()
+	init(viewModel: PageViewModel) {
+		self.viewModel = viewModel
+		naverViewController = NaverViewController(viewModel: NaverViewModel())
+		kakaoViewController = KakaoViewController(viewModel: KakaoViewModel())
 		tableViewControllers = [naverViewController, kakaoViewController]
 		super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
 		self.view.layer.borderColor = UIColor.gray.cgColor

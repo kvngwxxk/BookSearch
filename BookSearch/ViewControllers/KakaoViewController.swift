@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 class KakaoViewController: UIViewController {
-	let viewModel = KakaoViewModel()
+	let viewModel: KakaoViewModel
 	let table = UITableView()
 	let disposeBag = DisposeBag()
 	var bookList = [KakaoBook]()
@@ -22,6 +22,15 @@ class KakaoViewController: UIViewController {
 		table.registerCell(cellType: PageViewCell.self, reuseIdentifier: "PageViewCell")
 		setAutoLayout()
 		setBinding()
+	}
+	
+	init(viewModel: KakaoViewModel) {
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
 	}
 	
 	private func setAutoLayout() {

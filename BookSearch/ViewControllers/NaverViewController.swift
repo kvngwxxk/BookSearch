@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 class NaverViewController: UIViewController {
-	let viewModel = NaverViewModel()
+	let viewModel: NaverViewModel
 	let table = UITableView()
 	let disposeBag = DisposeBag()
 	var bookList = [NaverBook]()
@@ -22,6 +22,15 @@ class NaverViewController: UIViewController {
 		table.registerCell(cellType: PageViewCell.self, reuseIdentifier: "PageViewCell")
 		setAutoLayout()
 		setBinding()
+	}
+	
+	init(viewModel: NaverViewModel) {
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
 	}
 	
 	private func setAutoLayout() {

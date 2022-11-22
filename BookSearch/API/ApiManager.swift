@@ -37,6 +37,8 @@ class ApiManager {
 					case .success(_):
 						if let data = response.value {
 							do {
+								print(query)
+								print(String(data: data, encoding: .utf8))
 								let json = try JSONDecoder().decode(NaverResponse.self, from: data)
 								print(json.items)
 								if json.items.isEmpty {
@@ -111,8 +113,22 @@ class ApiManager {
 		]
 		var strings = [String]()
 		for index in 0..<separatedText.count {
-			
+			let runLoop = CFRunLoopGetCurrent()
+			AF.request(url, method: .get, parameters: ["query": separatedText[index]], encoding: URLEncoding.queryString, headers: headers).responseData { response in
+				do {
+					if let data = response.value {
+						let json = try JSONDecoder().decode(Errata.self, from: data)
+						strings.append(json.errata)
+					}
+					print(strings)
+					CFRunLoopStop(runLoop)
+				} catch {
+					print(error)
+				}
+			}
+			CFRunLoopRun()
 		}
+		return strings
 	}
 	
 	// MARK: KAKAO 책 검색 API Request
