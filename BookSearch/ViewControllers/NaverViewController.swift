@@ -90,6 +90,7 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 		print(indexPath.row)
 	}
 	
+	// TODO: Scroll시 데이터 reload	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		activityIndicator.start {
 			DispatchQueue.global(qos: .utility).async {
