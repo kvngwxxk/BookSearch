@@ -57,8 +57,9 @@ class KakaoViewController: UIViewController {
 
 extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if bookList.count > 20 {
-			return 20
+		if bookList.count >= 20 {
+			viewModel.page.accept(bookList.count/20 + 1)
+			return bookList.count
 		} else {
 			return bookList.count
 		}
@@ -69,11 +70,20 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 		if bookList.isEmpty {
 			return cell
 		} else {
+			let convertedDate: String = {
+				var date = bookList[indexPath.row].dateTime.replacingOccurrences(of: "-", with: "")
+				date = String(Array(date)[0...7])
+				let year = String(Array(date)[0...3])
+				let month = String(Array(date)[4...5])
+				let day = String(Array(date)[6...7])
+				return "\(year)년 \(month)월 \(day)일"
+			}()
 			let title = bookList[indexPath.row].title
-			let author = bookList[indexPath.row].authors.first ?? ""
-			let pubDate = bookList[indexPath.row].dateTime
+			let author = bookList[indexPath.row].authors.first ?? "작자 미상"
+			let pubDate = convertedDate
 			cell.idLabel.text = String(indexPath.row+1)
-			cell.contentLabel.text = "[\(title)]/[\(String(describing: author))] - [\(pubDate)]"
+			cell.titleLabel.text = title
+			cell.contentLabel.text = "[\(author)] - [\(pubDate)]"
 			return cell
 		}
 		
@@ -82,5 +92,22 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		self.present(DetailViewController(kakaoBook: bookList[indexPath.row]), animated: true, completion: nil)
 		print(indexPath.row)
+	}
+	
+	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+		let lastIndex = self.bookList.count - 1
+		if indexPath.row == lastIndex {
+			let page = viewModel.page.value
+			let isEnd = viewModel.isEnd.value
+			let total = viewModel.total.value
+			if isEnd && total == bookList.count {
+				print("끝")
+			} else {
+				let main = self.parent?.parent as! MainViewController
+				print("페이지 : \(self.viewModel.page.value)")
+				main.viewModel.requestKakaoBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page)
+			}
+			
+		}
 	}
 }

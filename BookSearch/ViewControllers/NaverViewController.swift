@@ -14,7 +14,6 @@ class NaverViewController: UIViewController {
 	let table = UITableView()
 	let disposeBag = DisposeBag()
 	var bookList = [NaverBook]()
-	var activityIndicator: LoadMoreActivityIndicator!
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.table.backgroundColor = .systemGray5
@@ -23,7 +22,6 @@ class NaverViewController: UIViewController {
 		table.registerCell(cellType: PageViewCell.self, reuseIdentifier: "PageViewCell")
 		setAutoLayout()
 		setBinding()
-		activityIndicator = LoadMoreActivityIndicator(scrollView: table, spacingFromLastCell: 10, spacingFromLastCellWhenLoadMoreActionStart: 30)
 	}
 	
 	init(viewModel: NaverViewModel) {
@@ -61,14 +59,11 @@ class NaverViewController: UIViewController {
 extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		if bookList.count >= 20 {
-			var index = 1
-			var total = viewModel.total.value
-			viewModel.page.accept(bookList.count/20 + 1)
+			viewModel.page.accept(bookList.count + 1)
 			return bookList.count
 		} else {
 			return bookList.count
 		}
-		
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -77,10 +72,23 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 			return cell
 		} else {
 			let title = bookList[indexPath.row].title
-			let author = bookList[indexPath.row].author
-			let pubDate = bookList[indexPath.row].pubDate
+			var author = bookList[indexPath.row].author
+			var pubDate = bookList[indexPath.row].pubDate
+			if bookList[indexPath.row].author == "" {
+				author = "작자 미상"
+			}
+			if bookList[indexPath.row].pubDate == "" {
+				pubDate = "출판 년도 미상"
+			} else {
+				let year = String(Array(bookList[indexPath.row].pubDate)[0...3])
+				let month = String(Array(bookList[indexPath.row].pubDate)[4...5])
+				let day = String(Array(bookList[indexPath.row].pubDate)[6...7])
+				pubDate = "\(year)년 \(month)월 \(day)일"
+			}
+			
 			cell.idLabel.text = String(indexPath.row+1)
-			cell.contentLabel.text = "[\(title)]/[\(author)] - [\(pubDate)]"
+			cell.titleLabel.text = title
+			cell.contentLabel.text = "[\(author)] - [\(pubDate)]"
 			return cell
 		}
 	}
@@ -90,22 +98,22 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 		print(indexPath.row)
 	}
 	
-	// TODO: Scroll시 데이터 reload	
-	func scrollViewDidScroll(_ scrollView: UIScrollView) {
-		activityIndicator.start {
-			DispatchQueue.global(qos: .utility).async {
-				sleep(1)
-				DispatchQueue.main.async {
-//					let main = self.parent?.parent as! MainViewController
-//					self.viewModel.page.bind { page in
-//						print(page+1)
-//						main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page+1)
-						print("invoke")
-//					}.disposed(by: self.disposeBag)
-					self.activityIndicator.stop()
-				}
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 40
+	}
+	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+		let lastIndex = self.bookList.count - 1
+		if indexPath.row == lastIndex {
+			let page = viewModel.page.value
+			let total = viewModel.total.value
+			if page <= total {
+				let main = self.parent?.parent as! MainViewController
+				print(self.viewModel.page.value)
+				main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page)
+			} else {
+				print("끝")
 			}
+			
 		}
 	}
-	
 }

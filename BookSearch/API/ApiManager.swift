@@ -140,11 +140,11 @@ class ApiManager {
 	}
 	
 	// MARK: KAKAO 책 검색 API Request
-	func requestKakaoBookInfo(query: String) -> Observable<([KakaoBook], Int)> {
+	func requestKakaoBookInfo(query: String, page: Int) -> Observable<([KakaoBook], Int, Bool)> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let KAKAO_API_KEY: String = infoDictionary["KakaoApiKey"] as! String
 		let size = 20
-		let page = 1
+		let page = page
 		let url = "https://dapi.kakao.com/v3/search/book"
 		let parameters: Parameters = [
 			"query": query,
@@ -154,19 +154,21 @@ class ApiManager {
 		let headers: HTTPHeaders = [
 			"Authorization": "KakaoAK \(KAKAO_API_KEY)"
 		]
-		return Observable<([KakaoBook], Int)>.create { observer in
+		return Observable<([KakaoBook], Int, Bool)>.create { observer in
 			
 			let request = AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
 				.responseData { response in
 					var books = [KakaoBook]()
 					var total = 0
+					var isEnd = false
 					switch response.result {
 					case .success(_):
 						if let data = response.value {
 							do {
 								let json = try JSONDecoder().decode(KakaoResponse.self, from: data)
 //								print(json.documents)
-								total = json.meta.total_count
+								total = json.meta.pageable_count
+								isEnd = json.meta.is_end
 								if json.documents.isEmpty {
 									books = []
 								} else {
@@ -180,7 +182,7 @@ class ApiManager {
 						}
 						
 						print(books)
-						observer.onNext((books, total))
+						observer.onNext((books, total, isEnd))
 					case .failure(let error):
 						observer.onError(error)
 					}

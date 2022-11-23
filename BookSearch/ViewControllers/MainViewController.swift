@@ -207,8 +207,14 @@ class MainViewController: UIViewController {
 			self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
 		}).disposed(by: disposeBag)
 		
-		self.viewModel.kakaoTotal.subscribe(onNext: {  [weak self] total in
-			
+		self.viewModel.kakaoTotal.subscribe(onNext: { [weak self] total in
+			guard let self = self else { return }
+			self.pageViewController.kakaoViewController.viewModel.total.accept(total)
+		}).disposed(by: disposeBag)
+		
+		self.viewModel.kakaoIsEnd.subscribe(onNext: { [weak self] isEnd in
+			guard let self = self else { return }
+			self.pageViewController.kakaoViewController.viewModel.isEnd.accept(isEnd)
 		}).disposed(by: disposeBag)
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in

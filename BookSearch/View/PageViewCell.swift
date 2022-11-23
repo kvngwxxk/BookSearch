@@ -16,10 +16,16 @@ class PageViewCell: UITableViewCell {
 		label.font = label.font.withSize(13)
 		return label
 	}()
+	let titleLabel: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.font = UIFont.boldSystemFont(ofSize: 14)
+		return label
+	}()
 	let contentLabel: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.font = label.font.withSize(14)
+		label.font = label.font.withSize(11)
 		return label
 	}()
 	
@@ -34,6 +40,7 @@ class PageViewCell: UITableViewCell {
 	private func setAutoLayout() {
 		self.addSubview(idLabel)
 		self.addSubview(contentLabel)
+		self.addSubview(titleLabel)
 		
 		idLabel.snp.makeConstraints { make in
 			make.leading.equalTo(self).offset(10)
@@ -41,11 +48,17 @@ class PageViewCell: UITableViewCell {
 			make.width.equalTo(self.frame.width/10)
 			make.height.equalTo(30)
 		}
+		titleLabel.snp.makeConstraints { make in
+			make.leading.equalTo(idLabel.snp.trailing).offset(10)
+			make.top.equalTo(self).offset(3)
+			make.bottom.equalTo(self.snp.centerY).offset(3)
+			make.trailing.equalTo(self)
+		}
 		contentLabel.snp.makeConstraints { make in
-			make.leading.equalTo(self.idLabel.snp.trailing).offset(10)
-			make.centerY.equalTo(self)
-			make.width.equalTo((self.frame.width/10) * 9 )
-			make.height.equalTo(30)
+			make.leading.equalTo(idLabel.snp.trailing).offset(10)
+			make.top.equalTo(self.snp.centerY).offset(3)
+			make.bottom.equalTo(self).offset(3)
+			make.trailing.equalTo(self)
 		}
 	}
 }
