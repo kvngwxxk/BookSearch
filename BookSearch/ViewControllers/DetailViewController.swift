@@ -13,7 +13,7 @@ class DetailViewController: UIViewController {
 	let naverBook: NaverBook?
 	let kakaoBook: KakaoBook?
 	
-	let backButton: UIButton = {
+	let closeButton: UIButton = {
 		let btn = UIButton(type: .close)
 		btn.translatesAutoresizingMaskIntoConstraints = false
 		return btn
@@ -57,7 +57,7 @@ class DetailViewController: UIViewController {
 		tableView.registerCell(cellType: DetailViewCell.self, reuseIdentifier: "DetailViewCell")
 		tableView.rowHeight = UITableView.automaticDimension
 		tableView.estimatedRowHeight = 200
-		backButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+		closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
 		setData()
 		setAutoLayout()
 		setThumbnail()
@@ -192,7 +192,7 @@ class DetailViewController: UIViewController {
 	private func setAutoLayout() {
 		self.view.addSubview(tableView)
 		self.view.addSubview(thumbnail)
-		self.view.addSubview(backButton)
+		self.view.addSubview(closeButton)
 		self.view.addSubview(titleLabel)
 		self.view.addSubview(authorLabel)
 		self.view.addSubview(publisherLabel)
@@ -206,19 +206,19 @@ class DetailViewController: UIViewController {
 		}
 		
 		thumbnail.snp.makeConstraints { make in
-			make.top.equalTo(backButton.snp.bottom).offset(20)
+			make.top.equalTo(closeButton.snp.bottom).offset(20)
 			make.bottom.equalTo(tableView.snp.top)
 			make.leading.equalTo(self.view).offset(20)
 			make.width.equalTo(self.view.frame.width * 2 / 5)
 		}
-		backButton.snp.makeConstraints { make in
+		closeButton.snp.makeConstraints { make in
 			make.top.equalTo(self.view).offset(20)
 			make.trailing.equalTo(self.view).offset(-20)
 			make.width.equalTo(20)
 			make.height.equalTo(20)
 		}
 		titleLabel.snp.makeConstraints { make in
-			make.top.equalTo(backButton.snp.bottom).offset(15)
+			make.top.equalTo(closeButton.snp.bottom).offset(15)
 			make.bottom.equalTo(authorLabel.snp.top).offset(-20)
 			make.leading.equalTo(thumbnail.snp.trailing).offset(20)
 			make.trailing.equalTo(self.view).offset(-20)
