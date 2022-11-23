@@ -69,6 +69,7 @@ class ApiManager {
 	}
 	
 	// MARK: NAVER 성인 검색어 판별 API Request
+	// 성인 검색어 판별 API는 띄어쓰기 기준으로 단어별로 나눈 다음 하나씩 판별
 	func requestAdult(query: String) -> [Bool] {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
@@ -104,6 +105,7 @@ class ApiManager {
 	}
 	
 	// MARK: NAVER 오타 변환 API Request
+	// 오타확인 API의 경우 성인 검색어와 마찬가지로 띄어쓰기 기준으로 단어별로 나눈 다음 하나씩 판별
 	func requestErrata(query: String) -> [String] {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
 		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String

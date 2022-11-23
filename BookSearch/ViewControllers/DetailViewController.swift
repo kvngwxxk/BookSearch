@@ -146,8 +146,9 @@ class DetailViewController: UIViewController {
 			bottomKeyData.append("pubDate")
 			bottomKeyData.append("isbn")
 			bottomKeyData.append("discount")
-			bottomKeyData.append("link")
 			bottomKeyData.append("description")
+			bottomKeyData.append("link")
+			
 			let description = naverBook.description.isEmpty ? "소개 없음" : naverBook.description
 			let pubDate = naverBook.pubDate.isEmpty ? "출판 년도 미상" : naverBook.pubDate
 			let isbn = naverBook.isbn.isEmpty ? "isbn 없음" : naverBook.isbn
@@ -156,8 +157,8 @@ class DetailViewController: UIViewController {
 			bottomValueData.append(pubDate)
 			bottomValueData.append(isbn)
 			bottomValueData.append(discount)
-			bottomValueData.append(link)
 			bottomValueData.append(description)
+			bottomValueData.append(link)
 		}
 	}
 	private func setThumbnail() {
@@ -233,6 +234,8 @@ class DetailViewController: UIViewController {
 		
 		publisherLabel.snp.makeConstraints { make in
 			make.top.equalTo(authorLabel.snp.bottom).offset(30)
+			make.height.equalTo(30)
+			make.bottom.equalTo(tableView.snp.top).offset(-40)
 			make.leading.equalTo(thumbnail.snp.trailing).offset(20)
 			make.trailing.equalTo(self.view).offset(-20)
 			
