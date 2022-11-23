@@ -8,7 +8,6 @@
 import Foundation
 
 struct NaverResponse: Codable {
-	var lastBuildDate: String
 	var total: Int
 	var start: Int
 	var display: Int

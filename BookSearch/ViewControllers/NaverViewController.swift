@@ -106,14 +106,13 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 		if indexPath.row == lastIndex {
 			let page = viewModel.page.value
 			let total = viewModel.total.value
-			if page <= total {
-				let main = self.parent?.parent as! MainViewController
-				print(self.viewModel.page.value)
-				main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page)
-			} else {
+			if total == bookList.count && viewModel.naverTable.value.count <= 20 {
 				print("끝")
+			} else {				
+				let main = self.parent?.parent as! MainViewController
+				print("페이지 : \(self.viewModel.page.value)")
+				main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page)
 			}
-			
 		}
 	}
 }
