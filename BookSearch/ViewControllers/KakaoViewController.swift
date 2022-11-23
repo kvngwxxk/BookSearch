@@ -67,17 +67,21 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: PageViewCell = tableView.dequeueCell(reuseIdentifier: "PageViewCell", indexPath: indexPath)
+		var convertedDate = ""
 		if bookList.isEmpty {
 			return cell
 		} else {
-			let convertedDate: String = {
+			if bookList[indexPath.row].dateTime == "" {
+				convertedDate = "출판 년도 미상"
+			} else {
 				var date = bookList[indexPath.row].dateTime.replacingOccurrences(of: "-", with: "")
 				date = String(Array(date)[0...7])
 				let year = String(Array(date)[0...3])
 				let month = String(Array(date)[4...5])
 				let day = String(Array(date)[6...7])
-				return "\(year)년 \(month)월 \(day)일"
-			}()
+				convertedDate = "\(year)년 \(month)월 \(day)일"
+			}
+			
 			let title = bookList[indexPath.row].title
 			let author = bookList[indexPath.row].authors.first ?? "작자 미상"
 			let pubDate = convertedDate
