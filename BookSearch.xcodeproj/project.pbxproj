@@ -199,7 +199,7 @@
 				0819C8BF292B0A5F00665DED /* API */,
 				0819C8BE292B0A5600665DED /* Model */,
 				0898F42029277BAA00C3633D /* Extensions */,
-				0898F4192927626000C3633D /* View */,
+				0898F4192927626000C3633D /* CustomCell */,
 				0898F41629275CB200C3633D /* Utilities */,
 				0898F40E29274B1300C3633D /* ViewModels */,
 				0898F40B2927482200C3633D /* ViewControllers */,
@@ -261,13 +261,13 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		0898F4192927626000C3633D /* View */ = {
+		0898F4192927626000C3633D /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
 				0898F41C292767CE00C3633D /* PageViewCell.swift */,
 				088CF530292DE0310047E963 /* DetailViewCell.swift */,
 			);
-			path = View;
+			path = CustomCell;
 			sourceTree = "<group>";
 		};
 		0898F42029277BAA00C3633D /* Extensions */ = {
