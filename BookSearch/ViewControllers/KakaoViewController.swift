@@ -119,6 +119,7 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 			if isEnd && total == bookList.count {
 				print("끝")
 			} else {
+				print("검색어 : \(searchText)")
 				print("페이지 : \(self.viewModel.page.value)")
 				viewModel.requestKakaoBookInfo(query: searchText, page: page)
 			}

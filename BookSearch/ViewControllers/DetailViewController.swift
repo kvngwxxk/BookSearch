@@ -281,5 +281,17 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
 		return 200
 	}
-	
+		
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let lastIndex = self.bottomKeyData.count - 1
+		if indexPath.row == lastIndex {
+			let url = URL(string: bottomValueData[lastIndex])
+			if let url = url {
+				if UIApplication.shared.canOpenURL(url) {
+					UIApplication.shared.open(url, options: [:], completionHandler: nil)
+				}
+			}
+			
+		}
+	}
 }

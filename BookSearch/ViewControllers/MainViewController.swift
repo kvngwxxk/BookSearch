@@ -177,7 +177,7 @@ class MainViewController: UIViewController {
 		}.disposed(by: disposeBag)
 		
 		self.viewModel.hasAdult
-			.throttle(.seconds(1), scheduler: MainScheduler.instance)
+			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] bool in
 			guard let self = self else { return }
 			if bool.contains(true) {
@@ -188,7 +188,7 @@ class MainViewController: UIViewController {
 		}).disposed(by: self.disposeBag)
 		
 		self.viewModel.correctWords
-			.throttle(.seconds(1), scheduler: MainScheduler.instance)
+			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] words in
 			guard let self = self else { return }
 			let correctText = words.joined(separator: " ")

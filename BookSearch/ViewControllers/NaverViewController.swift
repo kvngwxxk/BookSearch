@@ -117,6 +117,7 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 			if total == bookList.count && viewModel.naverTable.value.count <= 20 {
 				print("끝")
 			} else {
+				print("검색어 : \(searchText)")
 				print("페이지 : \(self.viewModel.page.value)")
 				viewModel.requestNaverBookInfo(query: searchText, page: page)
 			}
