@@ -58,8 +58,8 @@ class DetailViewController: UIViewController {
 		tableView.rowHeight = UITableView.automaticDimension
 		tableView.estimatedRowHeight = 200
 		closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
-		setData()
 		setAutoLayout()
+		setData()
 		setThumbnail()
 		setLabels()
 	}

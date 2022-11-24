@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 
 class MainViewController: UIViewController {
+	let semaphore = DispatchSemaphore(value: 1)
 	let disposeBag = DisposeBag()
 	let viewModel: MainViewModel!
 	var isChecked = false
@@ -168,50 +169,62 @@ class MainViewController: UIViewController {
 			self.viewModel.isAdult.accept(self.isChecked)
 		}.disposed(by: disposeBag)
 		
-		self.searchButton.rx.tap.bind { [weak self] _ in
-			guard let self = self else { return }
-			self.searchProcess()
-		}.disposed(by: disposeBag)
+		self.searchButton.rx.tap
+			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
+			.bind { [weak self] _ in
+				guard let self = self else { return }
+				self.searchProcess()
+			}.disposed(by: disposeBag)
 		
-		self.viewModel.hasAdult.subscribe(onNext: { [weak self] bool in
-			guard let self = self else { return }
-			if bool.contains(true) {
-				self.isAdult = true
-			} else {
-				self.isAdult = false
-			}
-		}).disposed(by: self.disposeBag)
+		self.viewModel.hasAdult
+			.subscribe(onNext: { [weak self] bool in
+				guard let self = self else { return }
+				if bool.contains(true) {
+					self.isAdult = true
+				} else {
+					self.isAdult = false
+				}
+			}).disposed(by: self.disposeBag)
 		
-		self.viewModel.correctWords.subscribe(onNext: { [weak self] words in
-			guard let self = self else { return }
-			let correctText = words.joined(separator: " ")
-			self.correctText = correctText
-		}).disposed(by: self.disposeBag)
+		self.viewModel.correctWords
+			.subscribe(onNext: { [weak self] words in
+				guard let self = self else { return }
+				let correctText = words.joined(separator: " ")
+				self.correctText = correctText
+			}).disposed(by: self.disposeBag)
 		
-		self.viewModel.naverBooks.subscribe(onNext: { [weak self] books in
-			guard let self = self else { return }
-			self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
-		}).disposed(by: disposeBag)
+		self.viewModel.naverBooks
+			.subscribe(onNext: { [weak self] books in
+				guard let self = self else { return }
+				self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
+			}).disposed(by: disposeBag)
 		
-		self.viewModel.naverTotal.subscribe(onNext: { [weak self] total in
-			guard let self = self else { return }
-			self.pageViewController.naverViewController.viewModel.total.accept(total)
-		}).disposed(by: disposeBag)
+		self.viewModel.naverTotal
+			.subscribe(onNext: { [weak self] total in
+				guard let self = self else { return }
+				
+				print("Naver Total : \(total)")
+				self.pageViewController.naverViewController.viewModel.total.accept(total)
+			}).disposed(by: disposeBag)
 		
-		self.viewModel.kakaoBooks.subscribe(onNext: { [weak self] books in
-			guard let self = self else { return }
-			self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
-		}).disposed(by: disposeBag)
+		self.viewModel.kakaoBooks
+			.subscribe(onNext: { [weak self] books in
+				guard let self = self else { return }
+				self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
+			}).disposed(by: disposeBag)
 		
-		self.viewModel.kakaoTotal.subscribe(onNext: { [weak self] total in
-			guard let self = self else { return }
-			self.pageViewController.kakaoViewController.viewModel.total.accept(total)
-		}).disposed(by: disposeBag)
+		self.viewModel.kakaoTotal
+			.subscribe(onNext: { [weak self] total in
+				guard let self = self else { return }
+				print("Kakao Total : \(total)")
+				self.pageViewController.kakaoViewController.viewModel.total.accept(total)
+			}).disposed(by: disposeBag)
 		
-		self.viewModel.kakaoIsEnd.subscribe(onNext: { [weak self] isEnd in
-			guard let self = self else { return }
-			self.pageViewController.kakaoViewController.viewModel.isEnd.accept(isEnd)
-		}).disposed(by: disposeBag)
+		self.viewModel.kakaoIsEnd
+			.subscribe(onNext: { [weak self] isEnd in
+				guard let self = self else { return }
+				self.pageViewController.kakaoViewController.viewModel.isEnd.accept(isEnd)
+			}).disposed(by: disposeBag)
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }

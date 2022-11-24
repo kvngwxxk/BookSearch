@@ -19,14 +19,14 @@ struct NaverBook: Codable {
 	var description: String
 	
 	enum CodingKeys: String, CodingKey {
-		case title = "title"
-		case link = "link"
-		case author = "author"
-		case image = "image"
-		case discount = "discount"
-		case publisher = "publisher"
-		case isbn = "isbn"
-		case description = "description"
+		case title
+		case link
+		case author
+		case image
+		case discount
+		case publisher
+		case isbn
+		case description
 		case pubDate = "pubdate"
 	}
 }

@@ -43,7 +43,8 @@ class NaverViewController: UIViewController {
 	}
 	
 	private func setBinding() {
-		viewModel.naverTable.bind { [weak self] books in
+		viewModel.naverTable
+			.bind { [weak self] books in
 			guard let self = self else { return }
 			if books.isEmpty {
 				self.bookList = books
@@ -54,7 +55,8 @@ class NaverViewController: UIViewController {
 			self.table.reloadData()
 		}.disposed(by: disposeBag)
 		
-		viewModel.searchText.subscribe(onNext: { [weak self] text in
+		viewModel.searchText
+			.subscribe(onNext: { [weak self] text in
 			guard let self = self else { return }
 			self.searchText = text
 		}).disposed(by: disposeBag)

@@ -22,17 +22,17 @@ struct KakaoBook: Codable {
 	var url: String
 	
 	enum CodingKeys: String, CodingKey {
-		case authors = "authors"
-		case contents = "contents"
+		case authors
+		case contents
 		case dateTime = "datetime"
-		case isbn = "isbn"
-		case price = "price"
-		case publisher = "publisher"
+		case isbn
+		case price
+		case publisher
 		case salePrice = "sale_price"
-		case status = "status"
-		case thumbnail = "thumbnail"
-		case title = "title"
-		case translators = "translators"
-		case url = "url"
+		case status
+		case thumbnail
+		case title
+		case translators
+		case url
 	}
 }

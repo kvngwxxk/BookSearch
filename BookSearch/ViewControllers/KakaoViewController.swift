@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 
 class KakaoViewController: UIViewController {
-	let apiManager = ApiManager.shared
 	let viewModel: KakaoViewModel
 	let table = UITableView()
 	let disposeBag = DisposeBag()
@@ -44,7 +43,8 @@ class KakaoViewController: UIViewController {
 	}
 	
 	private func setBinding() {
-		viewModel.kakaoTable.bind { [weak self] books in
+		viewModel.kakaoTable
+			.bind { [weak self] books in
 			guard let self = self else { return }
 			if books.isEmpty {
 				self.bookList = books
@@ -55,7 +55,8 @@ class KakaoViewController: UIViewController {
 			self.table.reloadData()
 		}.disposed(by: disposeBag)
 		
-		viewModel.searchText.subscribe(onNext: { [weak self] text in
+		viewModel.searchText
+			.subscribe(onNext: { [weak self] text in
 			guard let self = self else { return }
 			self.searchText = text
 		}).disposed(by: disposeBag)
@@ -118,9 +119,8 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 			if isEnd && total == bookList.count {
 				print("끝")
 			} else {
-				let main = self.parent?.parent as! MainViewController
 				print("페이지 : \(self.viewModel.page.value)")
-				main.viewModel.requestKakaoBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page)
+				viewModel.requestKakaoBookInfo(query: searchText, page: page)
 			}
 			
 		}
