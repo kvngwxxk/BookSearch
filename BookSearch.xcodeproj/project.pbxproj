@@ -133,7 +133,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0819C8BE292B0A5600665DED /* Model */ = {
+		0819C8BE292B0A5600665DED /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
 				0898F4142927577D00C3633D /* Adult.swift */,
@@ -141,7 +141,7 @@
 				0819C8C6292B136000665DED /* Naver */,
 				0819C8C7292B136800665DED /* Kakao */,
 			);
-			path = Model;
+			path = DataModels;
 			sourceTree = "<group>";
 		};
 		0819C8BF292B0A5F00665DED /* API */ = {
@@ -197,7 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				0819C8BF292B0A5F00665DED /* API */,
-				0819C8BE292B0A5600665DED /* Model */,
+				0819C8BE292B0A5600665DED /* DataModels */,
 				0898F42029277BAA00C3633D /* Extensions */,
 				0898F4192927626000C3633D /* CustomCell */,
 				0898F41629275CB200C3633D /* Utilities */,
