@@ -10,10 +10,12 @@ import UIKit
 import RxSwift
 
 class KakaoViewController: UIViewController {
+	let apiManager = ApiManager.shared
 	let viewModel: KakaoViewModel
 	let table = UITableView()
 	let disposeBag = DisposeBag()
 	var bookList = [KakaoBook]()
+	var searchText = ""
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.table.backgroundColor = .systemGray5
@@ -52,6 +54,11 @@ class KakaoViewController: UIViewController {
 			
 			self.table.reloadData()
 		}.disposed(by: disposeBag)
+		
+		viewModel.searchText.subscribe(onNext: { [weak self] text in
+			guard let self = self else { return }
+			self.searchText = text
+		}).disposed(by: disposeBag)
 	}
 }
 
@@ -83,11 +90,15 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 			}
 			
 			let title = bookList[indexPath.row].title
-			let author = bookList[indexPath.row].authors.first ?? "작자 미상"
+			var author = bookList[indexPath.row].authors.first ?? "작자 미상"
+			if bookList[indexPath.row].authors.count > 1 {
+				author = "\(String(describing: bookList[indexPath.row].authors.first!)) 외 \(bookList[indexPath.row].authors.count - 1)명"
+			}
+			cell.selectionStyle = .none
 			let pubDate = convertedDate
 			cell.idLabel.text = String(indexPath.row+1)
 			cell.titleLabel.text = title
-			cell.contentLabel.text = "[\(author)] - [\(pubDate)]"
+			cell.contentLabel.text = "[\(String(describing: author))] - [\(pubDate)]"
 			return cell
 		}
 		

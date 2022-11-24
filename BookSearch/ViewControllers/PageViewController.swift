@@ -15,6 +15,7 @@ class PageViewController: UIPageViewController {
 	let kakaoViewController: KakaoViewController
 	var tableViewControllers: [UIViewController]
 	var viewModel: PageViewModel
+	let disposeBag = DisposeBag()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()

@@ -156,7 +156,6 @@ class MainViewController: UIViewController {
 	private func setBinding() {
 		self.checkAdult.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			print(#line)
 			if self.isChecked {
 				self.isChecked = false
 				self.checkAdult.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
@@ -171,13 +170,11 @@ class MainViewController: UIViewController {
 		
 		self.searchButton.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			print(#line)
 			self.searchProcess()
 		}.disposed(by: disposeBag)
 		
 		self.viewModel.hasAdult.subscribe(onNext: { [weak self] bool in
 			guard let self = self else { return }
-			print(#line)
 			if bool.contains(true) {
 				self.isAdult = true
 			} else {
@@ -187,7 +184,6 @@ class MainViewController: UIViewController {
 		
 		self.viewModel.correctWords.subscribe(onNext: { [weak self] words in
 			guard let self = self else { return }
-			print(#line)
 			let correctText = words.joined(separator: " ")
 			self.correctText = correctText
 		}).disposed(by: self.disposeBag)
@@ -219,7 +215,6 @@ class MainViewController: UIViewController {
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			print(#line)
 			if self.pageViewController.viewModel.currentTable.value == "kakao" {
 				self.pageViewController.goToPreviousPage()
 			}
@@ -229,7 +224,6 @@ class MainViewController: UIViewController {
 		
 		self.kakaoTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
-			print(#line)
 			if self.pageViewController.viewModel.currentTable.value == "naver" {
 				self.pageViewController.goToNextPage()
 			}
@@ -264,11 +258,15 @@ class MainViewController: UIViewController {
 					// 책 검색
 					self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
 					self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+					correctText.isEmpty ? pageViewController.naverViewController.viewModel.searchText.accept(text) : pageViewController.naverViewController.viewModel.searchText.accept(correctText)
+					correctText.isEmpty ? pageViewController.kakaoViewController.viewModel.searchText.accept(text) : pageViewController.kakaoViewController.viewModel.searchText.accept(correctText)
 				}
 			} else {
 				self.viewModel.requestErrata(query: text)
 				self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
 				self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+				correctText.isEmpty ? pageViewController.naverViewController.viewModel.searchText.accept(text) : pageViewController.naverViewController.viewModel.searchText.accept(correctText)
+				correctText.isEmpty ? pageViewController.kakaoViewController.viewModel.searchText.accept(text) : pageViewController.kakaoViewController.viewModel.searchText.accept(correctText)
 			}
 		} else {
 			self.showToast(message: "검색어를 입력해주세요")

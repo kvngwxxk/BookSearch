@@ -108,8 +108,8 @@ class DetailViewController: UIViewController {
 			let contents = kakaoBook.contents.isEmpty ? "소개 없음" : kakaoBook.contents
 			let dateTime = kakaoBook.dateTime.isEmpty ? "출판 년도 미상" : kakaoBook.dateTime
 			let isbn = kakaoBook.isbn.isEmpty ? "isbn 없음" : kakaoBook.isbn
-			let price = kakaoBook.price == 0 ? "절판으로 인한 가격 미표기" : String(kakaoBook.price)
-			let salePrice = kakaoBook.salePrice == 0 ? "절판으로 인한 가격 미표기" : String(kakaoBook.salePrice)
+			let price = String(kakaoBook.price)
+			let salePrice = String(kakaoBook.salePrice)
 			let status = kakaoBook.status.isEmpty ? "상태 미상" : kakaoBook.status
 			let translators: String = {
 				if kakaoBook.translators.count == 0 {
@@ -173,7 +173,15 @@ class DetailViewController: UIViewController {
 					print("data is nil")
 				}
 			} else {
-				print("URL is nil")
+				let url = URL(string: "https://shopping-phinf.pstatic.net/main_3250648/32506485777.20220521150021.jpg")
+				if let url = url {
+					let data = try? Data(contentsOf: url)
+					if let data = data {
+						thumbnail.image = UIImage(data: data)
+					} else {
+						print("data is nil")
+					}
+				}
 			}
 		} else {
 			print("img url is nil")
@@ -260,6 +268,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: DetailViewCell = tableView.dequeueCell(reuseIdentifier: "DetailViewCell", indexPath: indexPath)
+		cell.selectionStyle = .none
 		cell.keyLabel.text = bottomKeyData[indexPath.row]
 		cell.valueLabel.text = bottomValueData[indexPath.row]
 		return cell

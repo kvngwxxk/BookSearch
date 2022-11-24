@@ -182,8 +182,6 @@ class ApiManager {
 								print(error)
 							}
 						}
-						
-						print(books)
 						observer.onNext((books, total, isEnd))
 					case .failure(let error):
 						observer.onError(error)

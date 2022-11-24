@@ -11,9 +11,20 @@ import RxCocoa
 import UIKit
 
 class NaverViewModel {
+	let apiManager = ApiManager.shared
 	var naverTable: BehaviorRelay<[NaverBook]> = .init(value: [])
 	var detail: PublishRelay<NaverBook> = PublishRelay()
 	var page: BehaviorRelay<Int> = .init(value: 1)
 	var total: BehaviorRelay<Int> = .init(value: 0)
+	var searchText: BehaviorRelay<String> = .init(value: "")
+	let disposeBag = DisposeBag()
+	
+	func requestNaverBookInfo(query: String, page: Int) {
+		apiManager.requestNaverBookInfo(query: query, page: page).subscribe(onNext: { [weak self] (books, total) in
+			guard let self = self else { return }
+			self.naverTable.accept(books)
+			self.total.accept(total)
+		}).disposed(by: disposeBag)
+	}
 	
 }

@@ -14,6 +14,7 @@ class NaverViewController: UIViewController {
 	let table = UITableView()
 	let disposeBag = DisposeBag()
 	var bookList = [NaverBook]()
+	var searchText = ""
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.table.backgroundColor = .systemGray5
@@ -52,6 +53,11 @@ class NaverViewController: UIViewController {
 			
 			self.table.reloadData()
 		}.disposed(by: disposeBag)
+		
+		viewModel.searchText.subscribe(onNext: { [weak self] text in
+			guard let self = self else { return }
+			self.searchText = text
+		}).disposed(by: disposeBag)
 	}
 	
 }
@@ -85,7 +91,7 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 				let day = String(Array(bookList[indexPath.row].pubDate)[6...7])
 				pubDate = "\(year)년 \(month)월 \(day)일"
 			}
-			
+			cell.selectionStyle = .none
 			cell.idLabel.text = String(indexPath.row+1)
 			cell.titleLabel.text = title
 			cell.contentLabel.text = "[\(author)] - [\(pubDate)]"
@@ -108,10 +114,9 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 			let total = viewModel.total.value
 			if total == bookList.count && viewModel.naverTable.value.count <= 20 {
 				print("끝")
-			} else {				
-				let main = self.parent?.parent as! MainViewController
+			} else {
 				print("페이지 : \(self.viewModel.page.value)")
-				main.viewModel.requestNaverBookInfo(query: main.correctText.isEmpty ? main.searchBar.text ?? "" : main.correctText, page: page)
+				viewModel.requestNaverBookInfo(query: searchText, page: page)
 			}
 		}
 	}
