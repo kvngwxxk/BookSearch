@@ -80,11 +80,13 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 			return cell
 		} else {
 			let title = bookList[indexPath.row].title
-			var author = bookList[indexPath.row].author
+			var author = bookList[indexPath.row].author.isEmpty ? "작자 미상" : bookList[indexPath.row].author
 			var pubDate = bookList[indexPath.row].pubDate
-			if bookList[indexPath.row].author == "" {
-				author = "작자 미상"
-			}
+			if bookList[indexPath.row].author.contains("^") {
+				let arr = bookList[indexPath.row].author.components(separatedBy: "^")
+				author = "\(arr.first!) 외 \(arr.count - 1)명"
+			} 
+			
 			if bookList[indexPath.row].pubDate == "" {
 				pubDate = "출판 년도 미상"
 			} else {

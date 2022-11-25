@@ -11,6 +11,7 @@ import RxSwift
 
 class ApiManager {
 	static let shared = ApiManager()
+	let semaphore = DispatchSemaphore(value: 1)
 	// MARK: NAVER 책 검색 API Request
 	func requestNaverBookInfo(query: String, page: Int) -> Observable<([NaverBook],Int)> {
 		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
@@ -80,7 +81,8 @@ class ApiManager {
 		var bool = [Bool]()
 		for index in 0..<separatedText.count {
 			let runLoop = CFRunLoopGetCurrent()
-			AF.request(url, method: .get, parameters: ["query": separatedText[index]], encoding: URLEncoding.queryString, headers: headers).responseData { response in
+			AF.request(url, method: .get, parameters: ["query": separatedText[index]], encoding: URLEncoding.queryString, headers: headers).responseData {
+				response in
 				do {
 					if let data = response.value {
 						let json = try JSONDecoder().decode(Adult.self, from: data)
@@ -91,11 +93,13 @@ class ApiManager {
 						}
 					}
 					print(bool)
+					self.semaphore.signal()
 					CFRunLoopStop(runLoop)
 				} catch {
 					print(error)
 				}
 			}
+			semaphore.wait()
 			CFRunLoopRun()
 		}
 		return bool
@@ -128,11 +132,13 @@ class ApiManager {
 						
 					}
 //					print(strings)
+					self.semaphore.signal()
 					CFRunLoopStop(runLoop)
 				} catch {
 					print(error)
 				}
 			}
+			semaphore.wait()
 			CFRunLoopRun()
 		}
 		return strings

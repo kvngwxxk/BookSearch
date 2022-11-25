@@ -155,6 +155,8 @@ class MainViewController: UIViewController {
 	}
 	
 	private func setBinding() {
+		
+		// 성인 단어 포함 여부 체크박스
 		self.checkAdult.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
 			if self.isChecked {
@@ -169,6 +171,7 @@ class MainViewController: UIViewController {
 			self.viewModel.isAdult.accept(self.isChecked)
 		}.disposed(by: disposeBag)
 		
+		// 검색 버튼
 		self.searchButton.rx.tap
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.bind { [weak self] _ in
@@ -176,6 +179,7 @@ class MainViewController: UIViewController {
 			self.searchProcess()
 		}.disposed(by: disposeBag)
 		
+		// 검색어가 성인 단어를 포함하는지에 대한 여부
 		self.viewModel.hasAdult
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] bool in
@@ -187,6 +191,7 @@ class MainViewController: UIViewController {
 			}
 		}).disposed(by: self.disposeBag)
 		
+		// 검색어 -> 오타가 있는 경우 수정된 검색어로 변경
 		self.viewModel.correctWords
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] words in
@@ -195,6 +200,7 @@ class MainViewController: UIViewController {
 			self.correctText = correctText
 		}).disposed(by: self.disposeBag)
 		
+		// API 요청으로 받은 Naver 도서 목록
 		self.viewModel.naverBooks
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] books in
@@ -209,6 +215,7 @@ class MainViewController: UIViewController {
 			self.pageViewController.naverViewController.viewModel.total.accept(total)
 		}).disposed(by: disposeBag)
 		
+		// API 요청으로 받은 Kakao 도서 목록
 		self.viewModel.kakaoBooks
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] books in
@@ -230,6 +237,8 @@ class MainViewController: UIViewController {
 			self.pageViewController.kakaoViewController.viewModel.isEnd.accept(isEnd)
 		}).disposed(by: disposeBag)
 		
+		// TODO: PageViewController에서 버튼을 구성할 예정
+		// Naver Tab 버튼
 		self.naverTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
 			if self.pageViewController.viewModel.currentTable.value == "kakao" {
@@ -239,6 +248,7 @@ class MainViewController: UIViewController {
 			
 		}.disposed(by: disposeBag)
 		
+		// Kakao Tab 버튼
 		self.kakaoTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
 			if self.pageViewController.viewModel.currentTable.value == "naver" {
@@ -272,6 +282,7 @@ class MainViewController: UIViewController {
 					// 오타 확인
 					self.viewModel.requestErrata(query: text)
 					
+					print(correctText.isEmpty ? text : correctText)
 					// 책 검색
 					self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
 					self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
@@ -301,7 +312,7 @@ class MainViewController: UIViewController {
 		toastLabel.layer.cornerRadius = 10;
 		toastLabel.clipsToBounds  =  true
 		self.view.addSubview(toastLabel)
-		UIView.animate(withDuration: 2.0, delay: 0.1, options: .curveEaseOut, animations: {
+		UIView.animate(withDuration: 2.0, delay: 0.2, options: .curveEaseOut, animations: {
 			toastLabel.alpha = 0.0
 		}, completion: {(isCompleted) in
 			toastLabel.removeFromSuperview()
@@ -309,4 +320,14 @@ class MainViewController: UIViewController {
 	}
 }
 
-
+extension MainViewController: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		if textField == self.searchBar {
+			searchBar.becomeFirstResponder()
+		} else {
+			searchBar.resignFirstResponder()
+		}
+		
+		return true
+	}
+}
