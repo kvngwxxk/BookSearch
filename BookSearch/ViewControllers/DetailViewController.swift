@@ -172,16 +172,6 @@ class DetailViewController: UIViewController {
 				} else {
 					print("data is nil")
 				}
-			} else {
-				let url = URL(string: "https://shopping-phinf.pstatic.net/main_3250648/32506485777.20220521150021.jpg")
-				if let url = url {
-					let data = try? Data(contentsOf: url)
-					if let data = data {
-						thumbnail.image = UIImage(data: data)
-					} else {
-						print("data is nil")
-					}
-				}
 			}
 		} else {
 			print("img url is nil")

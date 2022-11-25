@@ -75,19 +75,19 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: PageViewCell = tableView.dequeueCell(reuseIdentifier: "PageViewCell", indexPath: indexPath)
-		var convertedDate = ""
+		var date = Date()
+		var stringDate = ""
 		if bookList.isEmpty {
 			return cell
 		} else {
 			if bookList[indexPath.row].dateTime == "" {
-				convertedDate = "출판 년도 미상"
+				stringDate = "출판 년도 미상"
 			} else {
-				var date = bookList[indexPath.row].dateTime.replacingOccurrences(of: "-", with: "")
-				date = String(Array(date)[0...7])
-				let year = String(Array(date)[0...3])
-				let month = String(Array(date)[4...5])
-				let day = String(Array(date)[6...7])
-				convertedDate = "\(year)년 \(month)월 \(day)일"
+				stringDate = bookList[indexPath.row].dateTime.components(separatedBy: "T").first!
+				date = Utility.stringToDate(type: "kakao", string: stringDate)!
+				print(date.description)
+				stringDate = Utility.dateToString(date: date)
+				
 			}
 			
 			let title = bookList[indexPath.row].title
@@ -96,7 +96,7 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 				author = "\(String(describing: bookList[indexPath.row].authors.first!)) 외 \(bookList[indexPath.row].authors.count - 1)명"
 			}
 			cell.selectionStyle = .none
-			let pubDate = convertedDate
+			let pubDate = stringDate
 			cell.idLabel.text = String(indexPath.row+1)
 			cell.titleLabel.text = title
 			cell.contentLabel.text = "[\(String(describing: author))] - [\(pubDate)]"

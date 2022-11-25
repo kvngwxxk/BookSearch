@@ -76,27 +76,27 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: PageViewCell = tableView.dequeueCell(reuseIdentifier: "PageViewCell", indexPath: indexPath)
+		var date = Date()
 		if bookList.isEmpty {
 			return cell
 		} else {
 			let title = bookList[indexPath.row].title
 			var author = bookList[indexPath.row].author
-			var pubDate = bookList[indexPath.row].pubDate
 			if bookList[indexPath.row].author == "" {
 				author = "작자 미상"
 			}
+			var stringDate = bookList[indexPath.row].pubDate
 			if bookList[indexPath.row].pubDate == "" {
-				pubDate = "출판 년도 미상"
+				stringDate = "출판 년도 미상"
 			} else {
-				let year = String(Array(bookList[indexPath.row].pubDate)[0...3])
-				let month = String(Array(bookList[indexPath.row].pubDate)[4...5])
-				let day = String(Array(bookList[indexPath.row].pubDate)[6...7])
-				pubDate = "\(year)년 \(month)월 \(day)일"
+				date = Utility.stringToDate(type: "naver", string: stringDate)!
+				print(date.description)
+				stringDate = Utility.dateToString(date: date)
 			}
 			cell.selectionStyle = .none
 			cell.idLabel.text = String(indexPath.row+1)
 			cell.titleLabel.text = title
-			cell.contentLabel.text = "[\(author)] - [\(pubDate)]"
+			cell.contentLabel.text = "[\(author)] - [\(stringDate)]"
 			return cell
 		}
 	}

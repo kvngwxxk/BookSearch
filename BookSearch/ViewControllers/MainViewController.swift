@@ -76,6 +76,7 @@ class MainViewController: UIViewController {
 		setAutoLayout()
 		print(self.viewModel.hasAdult.value)
 		setBinding()
+		print(Utility.stringToDate(type: "kakao", string: "2017"))
 	}
 	
 	init(viewModel: MainViewModel) {
@@ -207,6 +208,7 @@ class MainViewController: UIViewController {
 			.subscribe(onNext: { [weak self] total in
 			guard let self = self else { return }
 			self.pageViewController.naverViewController.viewModel.total.accept(total)
+				print("Naver Total : \(total)")
 		}).disposed(by: disposeBag)
 		
 		self.viewModel.kakaoBooks
@@ -221,6 +223,7 @@ class MainViewController: UIViewController {
 			.subscribe(onNext: { [weak self] total in
 			guard let self = self else { return }
 			self.pageViewController.kakaoViewController.viewModel.total.accept(total)
+				print("Kakao Total : \(total)")
 		}).disposed(by: disposeBag)
 		
 		self.viewModel.kakaoIsEnd
