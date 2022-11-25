@@ -250,6 +250,7 @@ class DetailViewController: UIViewController {
 		}
 	}
 	
+	// Button Event
 	@objc func closeView() {
 		self.presentingViewController?.dismiss(animated: true, completion: nil)
 	}

@@ -22,6 +22,8 @@ class MainViewModel {
 	var kakaoTotal: BehaviorRelay<Int> = .init(value: 0)
 	var kakaoIsEnd: BehaviorRelay<Bool> = .init(value: false)
 	let disposeBag = DisposeBag()
+	
+	// ApiManager의 Naver 도서검색 API 요청
 	func requestNaverBookInfo(query: String, page: Int) {
 		apiManager.requestNaverBookInfo(query: query, page: page).subscribe(onNext: { [weak self] (books, total) in
 			guard let self = self else { return }
@@ -30,16 +32,19 @@ class MainViewModel {
 		}).disposed(by: disposeBag)
 	}
 	
+	// ApiManager의 Naver 성인 검색어 API 요청
 	func requestAdult(query: String) {
 		let bool = apiManager.requestAdult(query: query)
 		hasAdult.accept(bool)
 	}
 	
+	// ApiManager의 Naver 오타 변환 API 요청
 	func requestErrata(query: String) {
 		let words = apiManager.requestErrata(query: query)
 		correctWords.accept(words)
 	}
 	
+	// ApiManager의 Kakao 도서검색 API 요청
 	func requestKakaoBookInfo(query: String, page: Int) {
 		apiManager.requestKakaoBookInfo(query: query, page: page).subscribe(onNext: { [weak self] (books, total, isEnd) in
 			guard let self = self else { return }

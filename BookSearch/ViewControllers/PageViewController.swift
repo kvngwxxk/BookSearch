@@ -45,39 +45,38 @@ class PageViewController: UIPageViewController {
 
 extension PageViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-		guard let index = tableViewControllers.firstIndex(of: viewController) else {return nil}
+		guard let index = tableViewControllers.firstIndex(of: viewController) else { return nil }
+		
 		if tableViewControllers[index] is NaverViewController {
 			viewModel.currentTable.accept("naver")
 		} else {
 			viewModel.currentTable.accept("kakao")
 		}
+		
 		let previousIndex = index - 1
 		
 		if(previousIndex < 0){
 			return nil
-			
 		}
 		else{
-			
 			return tableViewControllers[previousIndex]
 		}
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-		guard let index = tableViewControllers.firstIndex(of: viewController) else {return nil}
+		guard let index = tableViewControllers.firstIndex(of: viewController) else { return nil }
+		
 		if tableViewControllers[index] is NaverViewController {
 			viewModel.currentTable.accept("naver")
 		} else {
 			viewModel.currentTable.accept("kakao")
 		}
+		
 		let nextIndex = index + 1
 		
 		if(nextIndex >= tableViewControllers.count){
 			return nil
-		}
-		else{
-			
-			
+		} else {
 			return tableViewControllers[nextIndex]
 		}
 		

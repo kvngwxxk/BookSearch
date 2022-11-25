@@ -12,7 +12,6 @@ import RxCocoa
 class KakaoViewModel {
 	let apiManager = ApiManager.shared
 	var kakaoTable: BehaviorRelay<[KakaoBook]> = .init(value: [])
-	var detail: PublishRelay<NaverBook> = PublishRelay()
 	var page: BehaviorRelay<Int> = .init(value: 1)
 	var total: BehaviorRelay<Int> = .init(value: 0)
 	var isEnd: BehaviorRelay<Bool> = .init(value: false)

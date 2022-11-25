@@ -38,10 +38,7 @@ class ApiManager {
 					case .success(_):
 						if let data = response.value {
 							do {
-//								print(query)
-//								print(String(data: data, encoding: .utf8))
 								let json = try JSONDecoder().decode(NaverResponse.self, from: data)
-//								print(json.items)
 								total = json.total
 								
 								if json.items.isEmpty {

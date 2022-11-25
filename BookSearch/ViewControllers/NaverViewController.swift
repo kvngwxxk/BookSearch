@@ -118,7 +118,7 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 				print("끝")
 			} else {
 				print("검색어 : \(searchText)")
-				print("페이지 : \(self.viewModel.page.value)")
+				print("네이버 start : \(self.viewModel.page.value)")
 				viewModel.requestNaverBookInfo(query: searchText, page: page)
 			}
 		}
