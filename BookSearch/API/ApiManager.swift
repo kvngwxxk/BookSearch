@@ -34,29 +34,41 @@ class ApiManager {
 				.responseData { response in
 					var books = [NaverBook]()
 					var total = 0
-					switch response.result {
-					case .success(_):
-						if let data = response.value {
-							do {
-								let json = try JSONDecoder().decode(NaverResponse.self, from: data)
-								total = json.total
-								
-								if json.items.isEmpty {
-									books = []
-								} else {
-									for i in 0..<json.items.count {
-										books.append(json.items[i])
+					switch response.response?.statusCode {
+					case 200:
+						switch response.result {
+						case .success(_):
+							if let data = response.value {
+								do {
+									let json = try JSONDecoder().decode(NaverResponse.self, from: data)
+									total = json.total
+									
+									if json.items.isEmpty {
+										books = []
+									} else {
+										for i in 0..<json.items.count {
+											books.append(json.items[i])
+										}
 									}
+								} catch {
+									print(error)
 								}
-							} catch {
-								print(error)
 							}
+							
+							observer.onNext((books, total))
+						case .failure(let error):
+							observer.onError(error)
 						}
-						
-						observer.onNext((books, total))
-					case .failure(let error):
-						observer.onError(error)
+					case 400:
+						print(response.error?.errorDescription ?? "")
+					case 404:
+						print(response.error?.errorDescription ?? "")
+					case 500:
+						print(response.error?.errorDescription ?? "")
+					default:
+						print(response.response?.statusCode)
 					}
+					
 					observer.onCompleted()
 				}
 			return Disposables.create {
@@ -81,20 +93,34 @@ class ApiManager {
 		for index in 0..<separatedText.count {
 			let runLoop = CFRunLoopGetCurrent()
 			AF.request(url, method: .get, parameters: ["query": separatedText[index]], encoding: URLEncoding.queryString, headers: headers).responseData { response in
-				do {
-					if let data = response.value {
-						let json = try JSONDecoder().decode(Adult.self, from: data)
-						if json.adult == "0" {
-							bool.append(false)
-						} else {
-							bool.append(true)
+				switch response.response?.statusCode {
+				case 200:
+					do {
+						if let data = response.value {
+							let json = try JSONDecoder().decode(Adult.self, from: data)
+							if json.adult == "0" {
+								bool.append(false)
+							} else {
+								bool.append(true)
+							}
 						}
+						print(bool)
+						CFRunLoopStop(runLoop)
+					} catch {
+						print(error)
 					}
-					print(bool)
-					CFRunLoopStop(runLoop)
-				} catch {
-					print(error)
+				case 400:
+					print(response.error ?? "")
+				case 401:
+					print(String(data: response.value!, encoding: .utf8))
+				case 404:
+					print(response.error?.errorDescription ?? "")
+				case 500:
+					print(response.error?.errorDescription ?? "")
+				default:
+					print(response.response?.statusCode)
 				}
+				
 			}
 			CFRunLoopRun()
 		}

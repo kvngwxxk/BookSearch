@@ -29,6 +29,8 @@ class MainViewModel {
 			guard let self = self else { return }
 			self.naverBooks.accept(books)
 			self.naverTotal.accept(total)
+		}, onError: { error in
+			print(error)
 		}).disposed(by: disposeBag)
 	}
 	

@@ -85,6 +85,10 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 			if bookList[indexPath.row].author == "" {
 				author = "작자 미상"
 			}
+			if bookList[indexPath.row].author.contains("^") {
+				let arr = bookList[indexPath.row].author.components(separatedBy: "^")
+				author = "\(arr.first!) 외 \(arr.count - 1)명"
+			}
 			var stringDate = bookList[indexPath.row].pubDate
 			if bookList[indexPath.row].pubDate == "" {
 				stringDate = "출판 년도 미상"

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
-
+import RxSwift
 class DetailViewController: UIViewController {
 	let naverBook: NaverBook?
 	let kakaoBook: KakaoBook?
@@ -18,7 +18,10 @@ class DetailViewController: UIViewController {
 		btn.translatesAutoresizingMaskIntoConstraints = false
 		return btn
 	}()
-	let thumbnail = UIImageView()
+	let thumbnail: UIButton = {
+		let btn = UIButton()
+		return btn
+	}()
 	let titleLabel: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
@@ -166,9 +169,14 @@ class DetailViewController: UIViewController {
 		if let imgUrl = imgUrl {
 			let url = URL(string: imgUrl)
 			if let url = url {
+				thumbnail.rx.tap.bind {
+					if UIApplication.shared.canOpenURL(url) {
+						UIApplication.shared.open(url, options: [:], completionHandler: nil)
+					}
+				}
 				let data = try? Data(contentsOf: url)
 				if let data = data {
-					thumbnail.image = UIImage(data: data)
+					thumbnail.setImage(UIImage(data: data), for: .normal)
 				} else {
 					print("data is nil")
 				}
@@ -244,6 +252,7 @@ class DetailViewController: UIViewController {
 	@objc func closeView() {
 		self.presentingViewController?.dismiss(animated: true, completion: nil)
 	}
+	
 }
 
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
