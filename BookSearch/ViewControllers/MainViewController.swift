@@ -312,6 +312,7 @@ class MainViewController: UIViewController {
 		self.searchBar.endEditing(true)
 		isAdult = false
 		correctText = ""
+		
 		self.viewModel.naverBooks.accept([])
 		self.viewModel.kakaoBooks.accept([])
 		while searchBar.text?.last == " " {
