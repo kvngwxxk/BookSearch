@@ -94,7 +94,6 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 				stringDate = "출판 년도 미상"
 			} else {
 				date = Utility.stringToDate(type: "naver", string: stringDate)!
-				print(date.description)
 				stringDate = Utility.dateToString(date: date)
 			}
 			cell.selectionStyle = .none

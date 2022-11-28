@@ -85,7 +85,6 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 			} else {
 				stringDate = bookList[indexPath.row].dateTime.components(separatedBy: "T").first!
 				date = Utility.stringToDate(type: "kakao", string: stringDate)!
-				print(date.description)
 				stringDate = Utility.dateToString(date: date)
 				
 			}

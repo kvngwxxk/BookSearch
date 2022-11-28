@@ -27,7 +27,7 @@ class DetailViewController: UIViewController {
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.numberOfLines = 0
 		label.lineBreakMode = .byTruncatingTail
-		label.font = UIFont.boldSystemFont(ofSize: 16)
+		label.font = UIFont.boldSystemFont(ofSize: 15)
 		return label
 	}()
 	let authorLabel: UILabel = {
@@ -35,7 +35,7 @@ class DetailViewController: UIViewController {
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.numberOfLines = 0
 		label.lineBreakMode = .byTruncatingTail
-		label.font = UIFont.systemFont(ofSize: 14)
+		label.font = UIFont.systemFont(ofSize: 12)
 		return label
 	}()
 	let publisherLabel: UILabel = {
@@ -138,7 +138,11 @@ class DetailViewController: UIViewController {
 			// 상단 항목
 			let thumbnail = naverBook.image.isEmpty ? "" : naverBook.image
 			let title = naverBook.title.isEmpty ? "제목 없음" : naverBook.title
-			let author: String = naverBook.author.isEmpty ? "작자 미상" : naverBook.author
+			var author: String = naverBook.author.isEmpty ? "작자 미상" : naverBook.author
+			if author.contains("^") {
+				let arr = author.components(separatedBy: "^")
+				author = arr.joined(separator: ", ")
+			}
 			let publisher = naverBook.publisher.isEmpty ? "출판사 없음" : naverBook.publisher
 			topData.updateValue(thumbnail, forKey: "thumbnail")
 			topData.updateValue(title, forKey: "title")
@@ -165,10 +169,8 @@ class DetailViewController: UIViewController {
 		}
 	}
 	private func setThumbnail() {
-		let imgUrl = topData["thumbnail"]
-		if let imgUrl = imgUrl {
-			let url = URL(string: imgUrl)
-			if let url = url {
+		if let imgUrl = topData["thumbnail"] {
+			if let url = URL(string: imgUrl) {
 				thumbnail.rx.tap.bind {
 					if UIApplication.shared.canOpenURL(url) {
 						UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -206,7 +208,7 @@ class DetailViewController: UIViewController {
 		thumbnail.translatesAutoresizingMaskIntoConstraints = false
 		
 		tableView.snp.makeConstraints { make in
-			make.top.equalTo(self.view.snp.centerY).offset(-100)
+			make.top.equalTo(self.view.snp.centerY).offset(-80)
 			make.bottom.equalTo(self.view)
 			make.leading.equalTo(self.view)
 			make.trailing.equalTo(self.view)
@@ -229,6 +231,7 @@ class DetailViewController: UIViewController {
 			make.bottom.equalTo(authorLabel.snp.top).offset(-20)
 			make.leading.equalTo(thumbnail.snp.trailing).offset(20)
 			make.trailing.equalTo(self.view).offset(-20)
+			make.height.lessThanOrEqualTo(120)
 		}
 		
 		authorLabel.snp.makeConstraints { make in
@@ -236,14 +239,16 @@ class DetailViewController: UIViewController {
 			make.bottom.equalTo(publisherLabel.snp.top).offset(-20)
 			make.leading.equalTo(thumbnail.snp.trailing).offset(20)
 			make.trailing.equalTo(self.view).offset(-20)
+			make.height.lessThanOrEqualTo(60)
 		}
 		
 		publisherLabel.snp.makeConstraints { make in
 			make.top.equalTo(authorLabel.snp.bottom).offset(30)
 			make.height.equalTo(30)
-			make.bottom.equalTo(tableView.snp.top).offset(-40)
+			make.bottom.equalTo(thumbnail).offset(-30)
 			make.leading.equalTo(thumbnail.snp.trailing).offset(20)
 			make.trailing.equalTo(self.view).offset(-20)
+			make.height.lessThanOrEqualTo(60)
 			
 		}
 	}
