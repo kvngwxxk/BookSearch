@@ -11,10 +11,13 @@ import RxCocoa
 
 class MainViewModel {
 	let apiManager = ApiManager.shared
+	let userDefaultsManager = UserDefaultsManager.shared
+	
 	var isAdult: BehaviorRelay<Bool> = .init(value: false)
 	var hasAdult: BehaviorRelay<[Bool]> = .init(value: [])
-	
 	var correctWords: BehaviorRelay<[String]> = .init(value: [])
+	
+	var searchTextList: BehaviorRelay<[String]> = .init(value: [])
 	
 	var naverBooks: BehaviorRelay<[NaverBook]> = .init(value: [])
 	var naverTotal: BehaviorRelay<Int> = .init(value: 0)
@@ -55,4 +58,15 @@ class MainViewModel {
 			self.kakaoIsEnd.accept(isEnd)
 		}).disposed(by: disposeBag)
 	}
+	
+	func initializeUserDefaultsManager() {
+		let list = userDefaultsManager.initializeUserDefaultsManager()
+		searchTextList.accept(list)
+	}
+	
+	func saveSearchText(searchText: String) {
+		let list = userDefaultsManager.saveSearchText(searchText: searchText)
+		searchTextList.accept(list)
+	}
+	
 }

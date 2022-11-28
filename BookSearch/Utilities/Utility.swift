@@ -14,22 +14,8 @@ class Utility {
 		return Date().timeIntervalSince(startDate)
 	}
 	
-	static func stringToDate(type: String, string: String) -> Date? {
-		if type == "naver" {
-			let dateFormatter: DateFormatter = {
-				let formatter = DateFormatter()
-				formatter.dateFormat = "yyyyMMdd"
-				return formatter
-			}()
-			return dateFormatter.date(from: string)
-		} else {
-			let dateFormatter: DateFormatter = {
-				let formatter = DateFormatter()
-				formatter.dateFormat = "yyyy-MM-dd"
-				return formatter
-			}()
-			return dateFormatter.date(from: string)
-		}
+	static func stringToDate(dateFormat: DateFormatter, string: String) -> Date? {
+		return dateFormat.date(from: string)
 	}
 	
 	static func dateToString(date: Date) -> String {

@@ -84,7 +84,12 @@ extension KakaoViewController: UITableViewDataSource, UITableViewDelegate {
 				stringDate = "출판 년도 미상"
 			} else {
 				stringDate = bookList[indexPath.row].dateTime.components(separatedBy: "T").first!
-				date = Utility.stringToDate(type: "kakao", string: stringDate)!
+				let dateFormatter: DateFormatter = {
+					let formatter = DateFormatter()
+					formatter.dateFormat = "yyyy-MM-dd"
+					return formatter
+				}()
+				date = Utility.stringToDate(dateFormat: dateFormatter, string: stringDate)!
 				stringDate = Utility.dateToString(date: date)
 				
 			}

@@ -37,6 +37,8 @@
 		0898F42429277CE000C3633D /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F42329277CE000C3633D /* PageViewController.swift */; };
 		08E5368F292C5072003FABF6 /* Errata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E5368E292C5072003FABF6 /* Errata.swift */; };
 		08E53697292CAFAF003FABF6 /* KakaoMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E53696292CAFAF003FABF6 /* KakaoMeta.swift */; };
+		08ED0C75293435930045CAFA /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED0C74293435930045CAFA /* Book.swift */; };
+		08ED0C77293438F80045CAFA /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED0C76293438F80045CAFA /* UserDefaultsManager.swift */; };
 		08EEB749292F5FFF00BEC14D /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EEB748292F5FFF00BEC14D /* Utility.swift */; };
 		0A6A7E99AD2F0D4260CCAB2B /* Pods_BookSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77E38F135F5B8157A77C2A7 /* Pods_BookSearch.framework */; };
 		215464A92F3D12486BE4B201 /* Pods_BookSearch_BookSearchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1233D6D7B6243E9FA09655EC /* Pods_BookSearch_BookSearchUITests.framework */; };
@@ -95,6 +97,8 @@
 		0898F42329277CE000C3633D /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		08E5368E292C5072003FABF6 /* Errata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errata.swift; sourceTree = "<group>"; };
 		08E53696292CAFAF003FABF6 /* KakaoMeta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoMeta.swift; sourceTree = "<group>"; };
+		08ED0C74293435930045CAFA /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		08ED0C76293438F80045CAFA /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		08EEB748292F5FFF00BEC14D /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		09CE11C0CBDAF2C6107EB9FD /* Pods-BookSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSearch.debug.xcconfig"; path = "Target Support Files/Pods-BookSearch/Pods-BookSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		1233D6D7B6243E9FA09655EC /* Pods_BookSearch_BookSearchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BookSearch_BookSearchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,16 +146,18 @@
 				08E5368E292C5072003FABF6 /* Errata.swift */,
 				0819C8C6292B136000665DED /* Naver */,
 				0819C8C7292B136800665DED /* Kakao */,
+				08ED0C74293435930045CAFA /* Book.swift */,
 			);
 			path = DataModels;
 			sourceTree = "<group>";
 		};
-		0819C8BF292B0A5F00665DED /* API */ = {
+		0819C8BF292B0A5F00665DED /* Manager */ = {
 			isa = PBXGroup;
 			children = (
 				0898F412292755D100C3633D /* ApiManager.swift */,
+				08ED0C76293438F80045CAFA /* UserDefaultsManager.swift */,
 			);
-			path = API;
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		0819C8C6292B136000665DED /* Naver */ = {
@@ -198,7 +204,7 @@
 		0898F3D5292722AC00C3633D /* BookSearch */ = {
 			isa = PBXGroup;
 			children = (
-				0819C8BF292B0A5F00665DED /* API */,
+				0819C8BF292B0A5F00665DED /* Manager */,
 				0819C8BE292B0A5600665DED /* DataModels */,
 				0898F42029277BAA00C3633D /* Extensions */,
 				0898F4192927626000C3633D /* CustomCell */,
@@ -566,6 +572,8 @@
 				08EEB749292F5FFF00BEC14D /* Utility.swift in Sources */,
 				0898F42429277CE000C3633D /* PageViewController.swift in Sources */,
 				089109D4292B599100E899A4 /* KakaoReponse.swift in Sources */,
+				08ED0C75293435930045CAFA /* Book.swift in Sources */,
+				08ED0C77293438F80045CAFA /* UserDefaultsManager.swift in Sources */,
 				0898F41029274B1E00C3633D /* MainViewModel.swift in Sources */,
 				0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */,
 				0819C8C3292B12AE00665DED /* KakaoBook.swift in Sources */,

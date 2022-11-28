@@ -12,7 +12,7 @@ import RxSwift
 class DetailViewController: UIViewController {
 	let naverBook: NaverBook?
 	let kakaoBook: KakaoBook?
-	
+	let disposeBag = DisposeBag()
 	let closeButton: UIButton = {
 		let btn = UIButton(type: .close)
 		btn.translatesAutoresizingMaskIntoConstraints = false
@@ -175,7 +175,7 @@ class DetailViewController: UIViewController {
 					if UIApplication.shared.canOpenURL(url) {
 						UIApplication.shared.open(url, options: [:], completionHandler: nil)
 					}
-				}
+				}.disposed(by: disposeBag)
 				let data = try? Data(contentsOf: url)
 				if let data = data {
 					thumbnail.setImage(UIImage(data: data), for: .normal)

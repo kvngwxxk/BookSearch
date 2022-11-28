@@ -17,6 +17,8 @@ class MainViewController: UIViewController {
 	var isChecked = false
 	var pageView = UIView()
 	var pageViewController = PageViewController(viewModel: PageViewModel())
+	private var tableHeightConstraint: Constraint?
+	let searchTable = UITableView()
 	let searchBar: UITextField = {
 		let textField = UITextField()
 		textField.translatesAutoresizingMaskIntoConstraints = false
@@ -67,16 +69,33 @@ class MainViewController: UIViewController {
 	
 	var correctText: String = ""
 	var isAdult = false
+	var searchTextList = [String]()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		self.navigationItem.title = "Book Search Demo"
 		self.view.backgroundColor = .white
-		setAutoLayout()
+		searchTable.backgroundColor = .white
+		searchTable.registerCell(cellType: UITableViewCell.self, reuseIdentifier: "MainCell")
+		searchTable.dataSource = self
+		searchTable.delegate = self
+		searchTable.layer.borderColor = UIColor.systemGray5.cgColor
+		searchTable.layer.borderWidth = 0.5
+		searchTable.layer.cornerRadius = 5
+		
 		print(self.viewModel.hasAdult.value)
+		
+		setAutoLayout()
 		setBinding()
-		print(Utility.stringToDate(type: "kakao", string: "2017"))
+		viewModel.initializeUserDefaultsManager()
+		
+		let gestureRecongnizer = UITapGestureRecognizer(target: self, action: #selector(focusOff))
+		gestureRecongnizer.cancelsTouchesInView = false
+		gestureRecongnizer.delegate = self
+		view.addGestureRecognizer(gestureRecongnizer)
+		
+		searchTable.isHidden = true
 	}
 	
 	init(viewModel: MainViewModel) {
@@ -89,7 +108,6 @@ class MainViewController: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	
 	private func setAutoLayout() {
 		self.view.addSubview(searchBar)
 		self.view.addSubview(searchButton)
@@ -98,11 +116,20 @@ class MainViewController: UIViewController {
 		self.view.addSubview(pageView)
 		self.view.addSubview(naverTab)
 		self.view.addSubview(kakaoTab)
+		self.view.addSubview(searchTable)
 		
 		addChild(pageViewController)
 		pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
 		self.pageView.addSubview(pageViewController.view)
 		
+		
+		searchTable.snp.makeConstraints { make in
+			make.top.equalTo(self.searchBar.snp.bottom)
+			make.width.equalTo(self.searchBar)
+			make.leading.equalTo(self.searchBar)
+			make.trailing.equalTo(self.searchBar)
+			make.height.equalTo(150)
+		}
 		searchBar.snp.makeConstraints { make in
 			make.top.equalTo(self.view.safeAreaLayoutGuide).offset(20)
 			make.leading.equalTo(self.view).offset(20)
@@ -156,6 +183,32 @@ class MainViewController: UIViewController {
 	}
 	
 	private func setBinding() {
+		self.searchBar.rx.text
+			.orEmpty
+			.map { $0 as String }
+			.bind { [weak self] newText in
+				guard let self = self else { return }
+				self.searchTable.isHidden = false
+				print(newText)
+				self.viewModel.searchTextList.subscribe(onNext: { list in
+					self.searchTextList = list.filter{ $0.hasPrefix(newText)}
+					if !newText.isEmpty {
+						if self.searchTextList.count >= 3 {
+							let arr = Array(self.searchTextList[0..<3])
+							self.searchTextList = arr
+						}
+					} else {
+						if self.searchTextList.count >= 5 {
+							let arr = Array(self.searchTextList[0..<5])
+							self.searchTextList = arr
+						}
+					}
+					self.searchTable.reloadData()
+					self.tableHeightConstraint?.update(offset: self.searchTextList.count * 30)
+				}).disposed(by: self.disposeBag)
+				
+			}.disposed(by: disposeBag)
+		
 		self.checkAdult.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
 			if self.isChecked {
@@ -168,70 +221,72 @@ class MainViewController: UIViewController {
 				print(self.isChecked)
 			}
 			self.viewModel.isAdult.accept(self.isChecked)
+			self.searchTable.isHidden = true
 		}.disposed(by: disposeBag)
 		
 		self.searchButton.rx.tap
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.bind { [weak self] _ in
-			guard let self = self else { return }
-			self.searchProcess()
-		}.disposed(by: disposeBag)
+				guard let self = self else { return }
+				self.searchProcess()
+				self.searchTable.isHidden = true
+			}.disposed(by: disposeBag)
 		
 		self.viewModel.hasAdult
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] bool in
-			guard let self = self else { return }
-			if bool.contains(true) {
-				self.isAdult = true
-			} else {
-				self.isAdult = false
-			}
-		}).disposed(by: self.disposeBag)
+				guard let self = self else { return }
+				if bool.contains(true) {
+					self.isAdult = true
+				} else {
+					self.isAdult = false
+				}
+			}).disposed(by: self.disposeBag)
 		
 		self.viewModel.correctWords
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] words in
-			guard let self = self else { return }
-			let correctText = words.joined(separator: " ")
-			self.correctText = correctText
-		}).disposed(by: self.disposeBag)
+				guard let self = self else { return }
+				let correctText = words.joined(separator: " ")
+				self.correctText = correctText
+			}).disposed(by: self.disposeBag)
 		
 		self.viewModel.naverBooks
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] books in
-			guard let self = self else { return }
-			self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
-		}).disposed(by: disposeBag)
+				guard let self = self else { return }
+				self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
+			}).disposed(by: disposeBag)
 		
 		self.viewModel.naverTotal
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] total in
-			guard let self = self else { return }
-			self.pageViewController.naverViewController.viewModel.total.accept(total)
+				guard let self = self else { return }
+				self.pageViewController.naverViewController.viewModel.total.accept(total)
 				print("Naver Total : \(total)")
-		}).disposed(by: disposeBag)
+			}).disposed(by: disposeBag)
 		
 		self.viewModel.kakaoBooks
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] books in
-			guard let self = self else { return }
-			self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
-		}).disposed(by: disposeBag)
+				guard let self = self else { return }
+				self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
+			}).disposed(by: disposeBag)
 		
 		self.viewModel.kakaoTotal
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] total in
-			guard let self = self else { return }
-			self.pageViewController.kakaoViewController.viewModel.total.accept(total)
+				guard let self = self else { return }
+				self.pageViewController.kakaoViewController.viewModel.total.accept(total)
 				print("Kakao Total : \(total)")
-		}).disposed(by: disposeBag)
+			}).disposed(by: disposeBag)
 		
 		self.viewModel.kakaoIsEnd
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] isEnd in
-			guard let self = self else { return }
-			self.pageViewController.kakaoViewController.viewModel.isEnd.accept(isEnd)
-		}).disposed(by: disposeBag)
+				guard let self = self else { return }
+				self.pageViewController.kakaoViewController.viewModel.isEnd.accept(isEnd)
+			}).disposed(by: disposeBag)
 		
 		self.naverTab.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
@@ -252,8 +307,9 @@ class MainViewController: UIViewController {
 		}.disposed(by: disposeBag)
 	}
 	
-	func searchProcess() {
+	private func searchProcess() {
 		// 결과 초기화
+		self.searchBar.endEditing(true)
 		isAdult = false
 		correctText = ""
 		self.viewModel.naverBooks.accept([])
@@ -278,19 +334,35 @@ class MainViewController: UIViewController {
 					// 책 검색
 					self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
 					self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+					
+					// UserDefaults에 저장
+					correctText.isEmpty ? viewModel.saveSearchText(searchText: text) : viewModel.saveSearchText(searchText: correctText)
+					
 					correctText.isEmpty ? pageViewController.naverViewController.viewModel.searchText.accept(text) : pageViewController.naverViewController.viewModel.searchText.accept(correctText)
 					correctText.isEmpty ? pageViewController.kakaoViewController.viewModel.searchText.accept(text) : pageViewController.kakaoViewController.viewModel.searchText.accept(correctText)
+					print(UserDefaults.standard.array(forKey: "searchText")!)
 				}
 			} else {
 				self.viewModel.requestErrata(query: text)
 				self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
 				self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+				
+				// UserDefaults에 저장
+				correctText.isEmpty ? viewModel.saveSearchText(searchText: text) : viewModel.saveSearchText(searchText: correctText)
+				
 				correctText.isEmpty ? pageViewController.naverViewController.viewModel.searchText.accept(text) : pageViewController.naverViewController.viewModel.searchText.accept(correctText)
 				correctText.isEmpty ? pageViewController.kakaoViewController.viewModel.searchText.accept(text) : pageViewController.kakaoViewController.viewModel.searchText.accept(correctText)
+				print(UserDefaults.standard.array(forKey: "searchText")!)
+				
 			}
 		} else {
 			self.showToast(message: "검색어를 입력해주세요")
 		}
+	}
+	
+	@objc private func focusOff() {
+		self.searchBar.endEditing(true)
+		self.searchTable.isHidden = true
 	}
 	
 	func showToast(message : String, font: UIFont = UIFont.systemFont(ofSize: 14.0)) {
@@ -312,4 +384,40 @@ class MainViewController: UIViewController {
 	}
 }
 
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		//		if searchBar.text != nil {
+		//			return 5
+		//		} else {
+		//			return 3
+		//		}
+		return searchTextList.count
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell: UITableViewCell = tableView.dequeueCell(reuseIdentifier: "MainCell", indexPath: indexPath)
+		cell.textLabel?.text = searchTextList[indexPath.row]
+		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 30
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.searchBar.text = searchTextList[indexPath.row]
+		self.searchProcess()
+		self.searchBar.endEditing(true)
+		self.searchTable.isHidden = true
+	}
+	
+	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+	}
+}
 
+extension MainViewController: UIGestureRecognizerDelegate {
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+						   shouldReceive touch: UITouch) -> Bool {
+		return (touch.view === self.view)
+	}
+}

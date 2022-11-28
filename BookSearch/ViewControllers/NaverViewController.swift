@@ -93,7 +93,12 @@ extension NaverViewController: UITableViewDataSource, UITableViewDelegate {
 			if bookList[indexPath.row].pubDate == "" {
 				stringDate = "출판 년도 미상"
 			} else {
-				date = Utility.stringToDate(type: "naver", string: stringDate)!
+				let dateFormatter: DateFormatter = {
+					let formatter = DateFormatter()
+					formatter.dateFormat = "yyyyMMdd"
+					return formatter
+				}()
+				date = Utility.stringToDate(dateFormat: dateFormatter, string: stringDate)!
 				stringDate = Utility.dateToString(date: date)
 			}
 			cell.selectionStyle = .none
