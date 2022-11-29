@@ -237,8 +237,11 @@ class MainViewController: UIViewController {
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.bind { [weak self] _ in
 				guard let self = self else { return }
+				DispatchQueue.main.async {
+					self.searchTable.isHidden = true
+				}
 				self.searchProcess()
-				self.searchTable.isHidden = true
+				
 			}.disposed(by: disposeBag)
 		
 		self.viewModel.hasAdult
@@ -317,7 +320,7 @@ class MainViewController: UIViewController {
 		self.searchBar.endEditing(true)
 		isAdult = false
 		correctText = ""
-		
+		self.bookViewController.data = []
 		self.viewModel.books.accept([])
 		while searchBar.text?.last == " " {
 			searchBar.text?.removeLast()

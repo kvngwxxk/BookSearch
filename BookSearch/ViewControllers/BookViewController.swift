@@ -15,7 +15,9 @@ class BookViewController: UIViewController {
 	let disposeBag = DisposeBag()
 	var bookList = [Book]()
 	var searchText = ""
+	var data = [Book]()
 	
+	var index = 0
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -55,6 +57,10 @@ class BookViewController: UIViewController {
 					self.bookList += books
 				}
 				print("1. :\(books.map{$0.title}), count: \(books.count)")
+				if !self.bookList.isEmpty{
+					self.data.append(contentsOf: Array(self.bookList[0..<20]))
+				}
+				
 				self.table.reloadData()
 			}.disposed(by: disposeBag)
 		
@@ -68,27 +74,22 @@ class BookViewController: UIViewController {
 
 extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if bookList.count >= 20 {
-			viewModel.naverPage.accept(bookList.count + 1)
-			viewModel.kakaoPage.accept(bookList.count/20 + 1)
-			return bookList.count
-		} else {
-			return bookList.count
-		}
+		
+		return data.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: PageViewCell = tableView.dequeueCell(reuseIdentifier: "PageViewCell", indexPath: indexPath)
 		var date = Date()
 		var stringDate = ""
-		if bookList.isEmpty {
+		if data.isEmpty {
 			return cell
 		} else {
-			if bookList[indexPath.row].dataSource == "Kakao" {
-				if bookList[indexPath.row].publishDate == "출판년도 미상" {
-					stringDate = bookList[indexPath.row].publishDate
+			if data[indexPath.row].dataSource == "Kakao" {
+				if data[indexPath.row].publishDate == "출판년도 미상" {
+					stringDate = data[indexPath.row].publishDate
 				} else {
-					stringDate = bookList[indexPath.row].publishDate.components(separatedBy: "T").first!
+					stringDate = data[indexPath.row].publishDate.components(separatedBy: "T").first!
 					let dateFormatter: DateFormatter = {
 						let formatter = DateFormatter()
 						formatter.dateFormat = "yyyy-MM-dd"
@@ -98,10 +99,10 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 					stringDate = Utility.dateToString(date: date)
 				}
 			} else {
-				if bookList[indexPath.row].publishDate == "출판년도 미상" {
-					stringDate = bookList[indexPath.row].publishDate
+				if data[indexPath.row].publishDate == "출판년도 미상" {
+					stringDate = data[indexPath.row].publishDate
 				} else {
-					stringDate = bookList[indexPath.row].publishDate
+					stringDate = data[indexPath.row].publishDate
 					let dateFormatter: DateFormatter = {
 						let formatter = DateFormatter()
 						formatter.dateFormat = "yyyyMMdd"
@@ -113,16 +114,15 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 			}
 			
 			
-			let title = bookList[indexPath.row].title
-			var author = bookList[indexPath.row].authors.first ?? "작자 미상"
-			if bookList[indexPath.row].authors.count > 1 {
-				author = "\(String(describing: bookList[indexPath.row].authors.first!)) 외 \(bookList[indexPath.row].authors.count - 1)명"
+			let title = data[indexPath.row].title
+			var author = data[indexPath.row].authors.first ?? "작자 미상"
+			if data[indexPath.row].authors.count > 1 {
+				author = "\(String(describing: data[indexPath.row].authors.first!)) 외 \(data[indexPath.row].authors.count - 1)명"
 			}
 			cell.selectionStyle = .none
-			let pubDate = stringDate
-			cell.idLabel.text = bookList[indexPath.row].dataSource
+			cell.idLabel.text = String(data[indexPath.row].dataSource.first!)
 			cell.titleLabel.text = title
-			cell.contentLabel.text = "[\(String(describing: author))] - [\(bookList[indexPath.row].isbn)]"
+			cell.contentLabel.text = "[\(String(describing: author))] - [\(stringDate)]"
 			return cell
 		}
 	}
@@ -133,18 +133,18 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		let lastIndex = self.bookList.count - 1
-		if indexPath.row == lastIndex {
-			let naverTotal = viewModel.naverTotal.value
-			let kakaoTotal = viewModel.kakaoTotal.value
-			if kakaoTotal + naverTotal == bookList.count {
-				print("끝")
-			} else {
-				
-				print("검색어 : \(searchText)")
-				print("카카오 page : \(self.viewModel.kakaoPage.value)")
-				print("네이버 page : \(self.viewModel.naverPage.value)")
+		let lastIndex = self.data.count - 1
+		print(indexPath.row)
+		if indexPath.row == lastIndex && bookList.count + 20 > index {
+			data.append(contentsOf: Array(bookList[index..<index+20]))
+			tableView.reloadData()
+			index += 20
+			if index + 20 > bookList.count {
+				index = bookList.count - 20
 			}
+			print("검색어 : \(searchText)")
+			print("카카오 page : \(self.viewModel.kakaoPage.value)")
+			print("네이버 page : \(self.viewModel.naverPage.value)")
 			
 		}
 	}
