@@ -17,7 +17,7 @@ class MainViewController: UIViewController {
 	var isChecked = false
 	var containerView = UIView()
 	var bookViewController = BookViewController(viewModel: BookViewModel())
-	private var tableHeightConstraint: Constraint?
+	private var tableHeightConstraint: NSLayoutConstraint!
 	var indicator: UIActivityIndicatorView!
 	let searchTable = UITableView()
 	let searchBar: UITextField = {
@@ -71,10 +71,20 @@ class MainViewController: UIViewController {
 	var correctText: String = ""
 	var isAdult = false
 	var searchTextList = [String]()
-	
+	override func updateViewConstraints() {
+		tableHeightConstraint.constant = searchTable.contentSize.height
+		searchTable.invalidateIntrinsicContentSize()
+		searchTable.layoutIfNeeded()
+		super.updateViewConstraints()
+	}
+	override func viewDidLayoutSubviews() {
+		updateViewConstraints()
+		super.viewDidLayoutSubviews()
+	}
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
+		tableHeightConstraint = .init(item: searchTable, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 150)
 		self.navigationItem.title = "Book Search Demo"
 		self.view.backgroundColor = .white
 		searchTable.backgroundColor = .white
@@ -212,8 +222,13 @@ class MainViewController: UIViewController {
 							self.searchTextList = arr
 						}
 					}
-					self.searchTable.reloadData()
-					self.tableHeightConstraint?.update(offset: self.searchTextList.count * 30)
+					DispatchQueue.main.async {
+						self.updateViewConstraints()
+						self.tableHeightConstraint.isActive = true
+						self.searchTable.reloadData()
+					}
+					
+					print(self.searchTable.contentSize.height)
 				}).disposed(by: self.disposeBag)
 				
 			}.disposed(by: disposeBag)
@@ -336,7 +351,9 @@ class MainViewController: UIViewController {
 				self.viewModel.requestAdult(query: text)
 				if isAdult {
 					self.showToast(message: "성인 단어 포함")
-					indicator.stopAnimating()
+					DispatchQueue.main.async {
+						self.indicator.stopAnimating()
+					}
 				} else {
 					// 오타 확인
 					self.viewModel.requestErrata(query: text)
@@ -350,7 +367,9 @@ class MainViewController: UIViewController {
 					
 					correctText.isEmpty ? bookViewController.viewModel.searchText.accept(text) : bookViewController.viewModel.searchText.accept(correctText)
 					print(UserDefaults.standard.array(forKey: "searchText")!)
-					indicator.stopAnimating()
+					DispatchQueue.main.async {
+						self.indicator.stopAnimating()
+					}
 				}
 			} else {
 				self.viewModel.requestErrata(query: text)
@@ -361,10 +380,15 @@ class MainViewController: UIViewController {
 				
 				correctText.isEmpty ? bookViewController.viewModel.searchText.accept(text) : bookViewController.viewModel.searchText.accept(correctText)
 				print(UserDefaults.standard.array(forKey: "searchText")!)
-				indicator.stopAnimating()
+				DispatchQueue.main.async {
+					self.indicator.stopAnimating()
+				}
 			}
 		} else {
 			self.showToast(message: "검색어를 입력해주세요")
+			DispatchQueue.main.async {
+				self.indicator.stopAnimating()
+			}
 		}
 	}
 	
@@ -423,6 +447,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+		updateViewConstraints()
 	}
 }
 
@@ -432,3 +457,5 @@ extension MainViewController: UIGestureRecognizerDelegate {
 		return (touch.view === self.view)
 	}
 }
+
+

@@ -120,9 +120,9 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 				author = "\(String(describing: data[indexPath.row].authors.first!)) 외 \(data[indexPath.row].authors.count - 1)명"
 			}
 			cell.selectionStyle = .none
-			cell.idLabel.text = String(data[indexPath.row].dataSource.first!)
+			cell.idLabel.text = String(indexPath.row + 1)
 			cell.titleLabel.text = title
-			cell.contentLabel.text = "[\(String(describing: author))] - [\(stringDate)]"
+			cell.contentLabel.text = "[\(String(describing: author))] - [\(stringDate)] - [\(bookList[indexPath.row].dataSource.first!)]"
 			return cell
 		}
 	}
@@ -148,8 +148,6 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 				data.append(contentsOf: Array(bookList[index..<endIndex]))
 				tableView.reloadData()
 				print("검색어 : \(searchText)")
-				print("카카오 page : \(self.viewModel.kakaoPage.value)")
-				print("네이버 page : \(self.viewModel.naverPage.value)")
 			}
 		}
 	}
