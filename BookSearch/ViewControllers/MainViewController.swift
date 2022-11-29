@@ -321,6 +321,7 @@ class MainViewController: UIViewController {
 		isAdult = false
 		correctText = ""
 		self.bookViewController.data = []
+		self.bookViewController.index = 0
 		self.viewModel.books.accept([])
 		while searchBar.text?.last == " " {
 			searchBar.text?.removeLast()

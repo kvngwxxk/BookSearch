@@ -15,8 +15,8 @@ class BookViewController: UIViewController {
 	let disposeBag = DisposeBag()
 	var bookList = [Book]()
 	var searchText = ""
-	var data = [Book]()
 	
+	var data = [Book]()
 	var index = 0
 	
 	override func viewDidLoad() {
@@ -58,7 +58,7 @@ class BookViewController: UIViewController {
 				}
 				print("1. :\(books.map{$0.title}), count: \(books.count)")
 				if !self.bookList.isEmpty{
-					self.data.append(contentsOf: Array(self.bookList[0..<20]))
+					self.data.append(contentsOf: Array(self.bookList[0..<(self.bookList.count < 20 ? self.bookList.count : 20)]))
 				}
 				
 				self.table.reloadData()
@@ -128,24 +128,29 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		//		self.present(DetailViewController(kakaoBook: bookList[indexPath.row]), animated: true, completion: nil)
+		self.present(DetailViewController(book: data[indexPath.row]), animated: true, completion: nil)
 		print(indexPath.row)
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let lastIndex = self.data.count - 1
-		print(indexPath.row)
+		var endIndex = 0
 		if indexPath.row == lastIndex && bookList.count + 20 > index {
-			data.append(contentsOf: Array(bookList[index..<index+20]))
-			tableView.reloadData()
-			index += 20
-			if index + 20 > bookList.count {
-				index = bookList.count - 20
+			if data.count == bookList.count {
+				print("끝")
+			} else {
+				index += 20
+				if index + 20 > bookList.count {
+					endIndex = bookList.count
+				} else {
+					endIndex = index + 20
+				}
+				data.append(contentsOf: Array(bookList[index..<endIndex]))
+				tableView.reloadData()
+				print("검색어 : \(searchText)")
+				print("카카오 page : \(self.viewModel.kakaoPage.value)")
+				print("네이버 page : \(self.viewModel.naverPage.value)")
 			}
-			print("검색어 : \(searchText)")
-			print("카카오 page : \(self.viewModel.kakaoPage.value)")
-			print("네이버 page : \(self.viewModel.naverPage.value)")
-			
 		}
 	}
 	

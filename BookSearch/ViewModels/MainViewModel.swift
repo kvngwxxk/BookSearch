@@ -30,12 +30,12 @@ class MainViewModel {
 		var mashUpBooks: [Book] = []
 		let (naverBooks, naverTotal) = apiManager.requestNaverBookInfo(query: query)
 		let (kakaoBooks, kakaoTotal) = apiManager.requestKakaoBookInfo(query: query)
-		for book in kakaoBooks {
-			let newBook = convertBook(kakaoBook: book)
-			mashUpBooks.append(newBook!)
-		}
 		for book in naverBooks {
 			let newBook = convertBook(naverBook: book)
+			mashUpBooks.append(newBook!)
+		}
+		for book in kakaoBooks {
+			let newBook = convertBook(kakaoBook: book)
 			mashUpBooks.append(newBook!)
 		}
 		let new = removeDuplicatedBooks(book: mashUpBooks)

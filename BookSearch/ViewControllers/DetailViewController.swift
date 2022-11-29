@@ -10,8 +10,7 @@ import UIKit
 import SnapKit
 import RxSwift
 class DetailViewController: UIViewController {
-	let naverBook: NaverBook?
-	let kakaoBook: KakaoBook?
+	let book: Book
 	let disposeBag = DisposeBag()
 	let closeButton: UIButton = {
 		let btn = UIButton(type: .close)
@@ -67,9 +66,8 @@ class DetailViewController: UIViewController {
 		setLabels()
 	}
 	
-	init(naverBook: NaverBook? = nil, kakaoBook: KakaoBook? = nil) {
-		self.naverBook = naverBook
-		self.kakaoBook = kakaoBook
+	init(book: Book) {
+		self.book = book
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -78,98 +76,45 @@ class DetailViewController: UIViewController {
 	}
 	
 	private func setData() {
-		if let kakaoBook = kakaoBook {
-			// MARK: Kakao Book Data
-			// 상단 항목
-			let thumbnail = kakaoBook.thumbnail.isEmpty ? "" : kakaoBook.thumbnail
-			let title = kakaoBook.title.isEmpty ? "제목 없음" : kakaoBook.title
-			let authors: String = {
-				if kakaoBook.authors.count == 0 {
-					return "작자 미상"
-				} else {
-					let author = kakaoBook.authors.count == 1 ? kakaoBook.authors[0] : kakaoBook.authors.joined(separator: ", ")
-					return author
-				}
-			}()
-			let publisher = kakaoBook.publisher.isEmpty ? "출판사 없음" : kakaoBook.publisher
-			topData.updateValue(thumbnail, forKey: "thumbnail")
-			topData.updateValue(title, forKey: "title")
-			topData.updateValue(authors, forKey: "author")
-			topData.updateValue(publisher, forKey: "publisher")
-			
-			
-			// 하단 항목
-			bottomKeyData.append("contents")
-			bottomKeyData.append("datetime")
-			bottomKeyData.append("isbn")
-			bottomKeyData.append("price")
-			bottomKeyData.append("sale_price")
-			bottomKeyData.append("status")
-			bottomKeyData.append("translators")
-			bottomKeyData.append("url")
-			
-			let contents = kakaoBook.contents.isEmpty ? "소개 없음" : kakaoBook.contents
-			let dateTime = kakaoBook.dateTime.isEmpty ? "출판 년도 미상" : kakaoBook.dateTime
-			let isbn = kakaoBook.isbn.isEmpty ? "isbn 없음" : kakaoBook.isbn
-			let price = String(kakaoBook.price)
-			let salePrice = String(kakaoBook.salePrice)
-			let status = kakaoBook.status.isEmpty ? "상태 미상" : kakaoBook.status
-			let translators: String = {
-				if kakaoBook.translators.count == 0 {
-					return "번역가 없음"
-				} else {
-					let translator = kakaoBook.translators.count == 1 ? kakaoBook.translators[0] : kakaoBook.translators.joined(separator: ", ")
-					return translator
-				}
-			}()
-			let url = kakaoBook.url.isEmpty ? "url 없음" : kakaoBook.url
-			bottomValueData.append(contents)
-			bottomValueData.append(dateTime)
-			bottomValueData.append(isbn)
-			bottomValueData.append(price)
-			bottomValueData.append(salePrice)
-			bottomValueData.append(status)
-			bottomValueData.append(translators)
-			bottomValueData.append(url)
-			
-			
-		}  else if let naverBook = naverBook {
-			// MARK: Naver Book Data
-			// 상단 항목
-			let thumbnail = naverBook.image.isEmpty ? "" : naverBook.image
-			let title = naverBook.title.isEmpty ? "제목 없음" : naverBook.title
-			var author: String = naverBook.author.isEmpty ? "작자 미상" : naverBook.author
-			if author.contains("^") {
-				let arr = author.components(separatedBy: "^")
-				author = arr.joined(separator: ", ")
-			}
-			let publisher = naverBook.publisher.isEmpty ? "출판사 없음" : naverBook.publisher
-			topData.updateValue(thumbnail, forKey: "thumbnail")
-			topData.updateValue(title, forKey: "title")
-			topData.updateValue(author, forKey: "author")
-			topData.updateValue(publisher, forKey: "publisher")
-			
-			// 하단 항목
-			bottomKeyData.append("pubDate")
-			bottomKeyData.append("isbn")
-			bottomKeyData.append("discount")
-			bottomKeyData.append("description")
-			bottomKeyData.append("link")
-			
-			let description = naverBook.description.isEmpty ? "소개 없음" : naverBook.description
-			let pubDate = naverBook.pubDate.isEmpty ? "출판 년도 미상" : naverBook.pubDate
-			let isbn = naverBook.isbn.isEmpty ? "isbn 없음" : naverBook.isbn
-			let discount = naverBook.discount.isEmpty ? "절판으로 인한 가격 미표기" : naverBook.discount
-			let link = naverBook.link.isEmpty ? "url 없음" : naverBook.link
-			bottomValueData.append(pubDate)
-			bottomValueData.append(isbn)
-			bottomValueData.append(discount)
-			bottomValueData.append(description)
-			bottomValueData.append(link)
-		}
+		let image = book.image
+		let title = book.title
+		let authors = book.authors.joined(separator: ", ")
+		let publisher = book.publisher
+		topData.updateValue(image, forKey: "image")
+		topData.updateValue(title, forKey: "title")
+		topData.updateValue(authors, forKey: "authors")
+		topData.updateValue(publisher, forKey: "publisher")
+		
+		
+		// 하단 항목
+		bottomKeyData.append("description")
+		bottomKeyData.append("publishDate")
+		bottomKeyData.append("isbn")
+		bottomKeyData.append("price")
+		bottomKeyData.append("sale_price")
+		bottomKeyData.append("status")
+		bottomKeyData.append("translators")
+		bottomKeyData.append("url")
+		
+		let description = book.description
+		let dateTime = book.publishDate
+		let isbn = book.isbn
+		let price = String(book.price)
+		let salePrice = String(book.salePrice)
+		let status = book.status
+		let translators = book.translators.joined(separator: ", ")
+		let url = book.url
+		bottomValueData.append(description)
+		bottomValueData.append(dateTime)
+		bottomValueData.append(isbn)
+		bottomValueData.append(price)
+		bottomValueData.append(salePrice)
+		bottomValueData.append(status)
+		bottomValueData.append(translators)
+		bottomValueData.append(url)
 	}
 	private func setThumbnail() {
-		if let imgUrl = topData["thumbnail"] {
+		if let imgUrl = topData["image"] {
 			if let url = URL(string: imgUrl) {
 				thumbnail.rx.tap.bind {
 					if UIApplication.shared.canOpenURL(url) {
@@ -191,8 +136,8 @@ class DetailViewController: UIViewController {
 	}
 	private func setLabels() {
 		let title = topData["title"]
-		let author = topData["author"] ?? "미상"
-		let publisher = topData["publisher"] ?? "출판사 없음"
+		let author = topData["authors"]!
+		let publisher = topData["publisher"]!
 		
 		titleLabel.text = title
 		authorLabel.text = "저자 : \(author)"
