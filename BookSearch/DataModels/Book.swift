@@ -20,4 +20,6 @@ struct Book: Codable {
 	var translators: [String]
 	var price: Int
 	var status: String
+	var dataSource: String
+	var duplicated = false
 }

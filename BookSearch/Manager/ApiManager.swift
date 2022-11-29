@@ -77,6 +77,79 @@ class ApiManager {
 		}
 	}
 	
+	func requestNaverBookInfo(query: String) -> ([NaverBook], Int) {
+		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
+		let NAVER_CLIENT_ID: String = infoDictionary["NaverClientId"] as! String
+		let NAVER_CLIENT_SECRET: String = infoDictionary["NaverClientSecret"] as! String
+		let display = 100
+		var start = 1
+		let url = "https://openapi.naver.com/v1/search/book.json"
+		
+		let headers: HTTPHeaders = [
+			"X-Naver-Client-Id": NAVER_CLIENT_ID,
+			"X-Naver-Client-Secret": NAVER_CLIENT_SECRET
+		]
+		var books = [NaverBook]()
+		var total = 0
+		while true {
+			if start > 1000 {
+				break
+			}
+			
+			let parameters: Parameters = [
+				"query": query,
+				"display": display,
+				"start": start
+			]
+			let runLoop = CFRunLoopGetCurrent()
+			AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
+				.responseData { response in
+					switch response.response?.statusCode {
+					case 200:
+						switch response.result {
+						case .success(_):
+							if let data = response.value {
+								do {
+									let json = try JSONDecoder().decode(NaverResponse.self, from: data)
+									total = json.total
+									if json.items.isEmpty {
+										books = []
+									} else {
+										for i in 0..<json.items.count {
+											books.append(json.items[i])
+										}
+									}
+									CFRunLoopStop(runLoop)
+								} catch {
+									print(error)
+								}
+							}
+							
+						case .failure(let error):
+							print(error)
+						}
+					case 400:
+						print(response.error?.errorDescription ?? "")
+					case 404:
+						print(response.error?.errorDescription ?? "")
+					case 500:
+						print(response.error?.errorDescription ?? "")
+					default:
+						print(response.response?.statusCode)
+					}
+				}
+			CFRunLoopRun()
+			start += 100
+			if start > total {
+				break
+			}
+			if start > 1000 {
+				start -= 1
+			}
+		}
+		return (books, total)
+	}
+	
 	// MARK: NAVER 성인 검색어 판별 API Request
 	// 성인 검색어 판별 API는 띄어쓰기 기준으로 단어별로 나눈 다음 하나씩 판별
 	func requestAdult(query: String) -> [Bool] {
@@ -153,7 +226,7 @@ class ApiManager {
 						}
 						
 					}
-//					print(strings)
+					//					print(strings)
 					CFRunLoopStop(runLoop)
 				} catch {
 					print(error)
@@ -191,7 +264,7 @@ class ApiManager {
 						if let data = response.value {
 							do {
 								let json = try JSONDecoder().decode(KakaoResponse.self, from: data)
-//								print(json.documents)
+								//								print(json.documents)
 								total = json.meta.pageable_count
 								isEnd = json.meta.is_end
 								if json.documents.isEmpty {
@@ -215,5 +288,71 @@ class ApiManager {
 				request.cancel()
 			}
 		}
+	}
+	
+	func requestKakaoBookInfo(query: String) -> ([KakaoBook], Int) {
+		let infoDictionary: [String: Any] = Bundle.main.infoDictionary ?? [:]
+		let KAKAO_API_KEY: String = infoDictionary["KakaoApiKey"] as! String
+		let size = 50
+		var page = 1
+		let url = "https://dapi.kakao.com/v3/search/book"
+		
+		let headers: HTTPHeaders = [
+			"Authorization": "KakaoAK \(KAKAO_API_KEY)"
+		]
+		var books = [KakaoBook]()
+		var total = 0
+		var isEnd = false
+		while !isEnd {
+			let runLoop = CFRunLoopGetCurrent()
+			let parameters: Parameters = [
+				"query": query,
+				"size": size,
+				"page": page
+			]
+			AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.queryString, headers: headers)
+				.responseData { response in
+					switch response.response?.statusCode {
+					case 200:
+						switch response.result {
+						case .success(_):
+							if let data = response.value {
+								do {
+									let json = try JSONDecoder().decode(KakaoResponse.self, from: data)
+									//								print(json.documents)
+									total = json.meta.pageable_count
+									isEnd = json.meta.is_end
+									if json.documents.isEmpty {
+										books = []
+									} else {
+										for i in 0..<json.documents.count {
+											books.append(json.documents[i])
+										}
+									}
+									CFRunLoopStop(runLoop)
+								} catch {
+									print(error)
+								}
+							}
+						case .failure(let error):
+							print(error)
+						}
+					case 400:
+						print(response.error?.errorDescription ?? "")
+					case 404:
+						print(response.error?.errorDescription ?? "")
+					case 500:
+						print(response.error?.errorDescription ?? "")
+					default:
+						print(response.response?.statusCode)
+					}
+				}
+			CFRunLoopRun()
+			page += 1
+			if page > 50 {
+				break
+			}
+		}
+		return (books, total)
 	}
 }

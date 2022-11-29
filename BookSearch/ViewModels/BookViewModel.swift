@@ -1,59 +1,46 @@
 //
-//  MainViewModel.swift
+//  BookViewModel.swift
 //  BookSearch
 //
-//  Created by Kangwook Lee on 2022/11/18.
+//  Created by Kangwook Lee on 2022/11/28.
 //
 
 import Foundation
 import RxSwift
 import RxCocoa
 
-class MainViewModel {
+class BookViewModel {
 	let apiManager = ApiManager.shared
-	let userDefaultsManager = UserDefaultsManager.shared
 	
-	var isAdult: BehaviorRelay<Bool> = .init(value: false)
-	var hasAdult: BehaviorRelay<[Bool]> = .init(value: [])
-	var correctWords: BehaviorRelay<[String]> = .init(value: [])
-	
-	var searchTextList: BehaviorRelay<[String]> = .init(value: [])
-	
-	var books: BehaviorRelay<[Book]> = .init(value: [])
-	
-	var naverTotal: BehaviorRelay<Int> = .init(value: 0)
+	var kakaoPage: BehaviorRelay<Int> = .init(value: 1)
 	var kakaoTotal: BehaviorRelay<Int> = .init(value: 0)
 	var kakaoIsEnd: BehaviorRelay<Bool> = .init(value: false)
+	
+	var naverPage: BehaviorRelay<Int> = .init(value: 1)
+	var naverTotal: BehaviorRelay<Int> = .init(value: 0)
+	
+	var bookTable: BehaviorRelay<[Book]> = .init(value: [])
+	var searchText: BehaviorRelay<String> = .init(value: "")
 	let disposeBag = DisposeBag()
 	
 	func requestBookInfo(query: String) {
 		var mashUpBooks: [Book] = []
 		let (naverBooks, naverTotal) = apiManager.requestNaverBookInfo(query: query)
 		let (kakaoBooks, kakaoTotal) = apiManager.requestKakaoBookInfo(query: query)
-		for book in kakaoBooks {
-			let newBook = convertBook(kakaoBook: book)
-			mashUpBooks.append(newBook!)
-		}
 		for book in naverBooks {
 			let newBook = convertBook(naverBook: book)
+			print(newBook!)
+			mashUpBooks.append(newBook!)
+		}
+		for book in kakaoBooks {
+			let newBook = convertBook(kakaoBook: book)
+			print(newBook!)
 			mashUpBooks.append(newBook!)
 		}
 		let new = removeDuplicatedBooks(book: mashUpBooks)
-		books.accept(new)
+		bookTable.accept(new)
 		self.naverTotal.accept(naverTotal)
 		self.kakaoTotal.accept(kakaoTotal)
-	}
-	
-	// ApiManager의 Naver 성인 검색어 API 요청
-	func requestAdult(query: String) {
-		let bool = apiManager.requestAdult(query: query)
-		hasAdult.accept(bool)
-	}
-	
-	// ApiManager의 Naver 오타 변환 API 요청
-	func requestErrata(query: String) {
-		let words = apiManager.requestErrata(query: query)
-		correctWords.accept(words)
 	}
 	
 	func removeDuplicatedBooks(book: [Book]) -> [Book]  {
@@ -72,20 +59,9 @@ class MainViewModel {
 					}
 				}
 			}
-		}		
+		}
 		return bookList.filter{$0.duplicated == false}
 	}
-	
-	func initializeUserDefaultsManager() {
-		let list = userDefaultsManager.initializeUserDefaultsManager()
-		searchTextList.accept(list)
-	}
-	
-	func saveSearchText(searchText: String) {
-		let list = userDefaultsManager.saveSearchText(searchText: searchText)
-		searchTextList.accept(list)
-	}
-	
 	private func convertBook(naverBook: NaverBook? = nil, kakaoBook: KakaoBook? = nil) -> Book? {
 		if let naverBook = naverBook {
 			let title = naverBook.title.isEmpty ? "제목 없음" : naverBook.title

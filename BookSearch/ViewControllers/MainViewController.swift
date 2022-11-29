@@ -15,9 +15,10 @@ class MainViewController: UIViewController {
 	let disposeBag = DisposeBag()
 	let viewModel: MainViewModel!
 	var isChecked = false
-	var pageView = UIView()
-	var pageViewController = PageViewController(viewModel: PageViewModel())
+	var containerView = UIView()
+	var bookViewController = BookViewController(viewModel: BookViewModel())
 	private var tableHeightConstraint: Constraint?
+	var indicator: UIActivityIndicatorView!
 	let searchTable = UITableView()
 	let searchBar: UITextField = {
 		let textField = UITextField()
@@ -109,19 +110,27 @@ class MainViewController: UIViewController {
 	}
 	
 	private func setAutoLayout() {
+		guard let window = UIApplication.shared.windows.last else { return }
+		if let existedView = window.subviews.first(where: {$0 is UIActivityIndicatorView}) as? UIActivityIndicatorView {
+			indicator = existedView
+		} else {
+			indicator = UIActivityIndicatorView(style: .medium)
+			indicator.frame = window.frame
+			indicator.color = .gray
+			window.addSubview(indicator)
+		}
 		self.view.addSubview(searchBar)
 		self.view.addSubview(searchButton)
 		self.view.addSubview(checkAdult)
 		self.view.addSubview(adultLabel)
-		self.view.addSubview(pageView)
-		self.view.addSubview(naverTab)
-		self.view.addSubview(kakaoTab)
+		self.view.addSubview(containerView)
+		//		self.view.addSubview(naverTab)
+		//		self.view.addSubview(kakaoTab)
 		self.view.addSubview(searchTable)
 		
-		addChild(pageViewController)
-		pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
-		self.pageView.addSubview(pageViewController.view)
-		
+		addChild(bookViewController)
+		bookViewController.view.translatesAutoresizingMaskIntoConstraints = false
+		self.containerView.addSubview(bookViewController.view)
 		
 		searchTable.snp.makeConstraints { make in
 			make.top.equalTo(self.searchBar.snp.bottom)
@@ -154,32 +163,32 @@ class MainViewController: UIViewController {
 			make.width.equalTo(15)
 			make.height.equalTo(17)
 		}
-		pageView.snp.makeConstraints { make in
+		containerView.snp.makeConstraints { make in
 			make.top.equalTo(self.searchBar.snp.bottom).offset(20)
-			make.bottom.equalTo(self.view.safeAreaLayoutGuide).offset(-10)
+			make.bottom.equalTo(self.view.safeAreaLayoutGuide).offset(-20)
 			make.leading.equalTo(self.view.safeAreaLayoutGuide).offset(20)
 			make.trailing.equalTo(self.view.safeAreaLayoutGuide).offset(-20)
 		}
 		
-		pageViewController.view.snp.makeConstraints { make in
-			make.top.equalTo(self.naverTab.snp.bottom)
-			make.bottom.equalTo(self.pageView)
-			make.leading.equalTo(self.pageView)
-			make.trailing.equalTo(self.pageView)
+		bookViewController.view.snp.makeConstraints { make in
+			make.top.equalTo(self.containerView)
+			make.bottom.equalTo(self.containerView)
+			make.leading.equalTo(self.containerView)
+			make.trailing.equalTo(self.containerView)
 		}
 		
-		naverTab.snp.makeConstraints { make in
-			make.top.equalTo(self.pageView.snp.top)
-			make.bottom.equalTo(pageViewController.view.snp.top)
-			make.leading.equalTo(self.pageView.snp.leading)
-			make.width.equalTo(100)
-		}
-		kakaoTab.snp.makeConstraints { make in
-			make.top.equalTo(self.pageView.snp.top)
-			make.bottom.equalTo(pageViewController.view.snp.top)
-			make.leading.equalTo(self.naverTab.snp.trailing)
-			make.width.equalTo(100)
-		}
+		//		naverTab.snp.makeConstraints { make in
+		//			make.top.equalTo(self.containerView.snp.top)
+		//			make.bottom.equalTo(bookViewController.view.snp.top)
+		//			make.leading.equalTo(self.containerView.snp.leading)
+		//			make.width.equalTo(100)
+		//		}
+		//		kakaoTab.snp.makeConstraints { make in
+		//			make.top.equalTo(self.containerView.snp.top)
+		//			make.bottom.equalTo(bookViewController.view.snp.top)
+		//			make.leading.equalTo(self.naverTab.snp.trailing)
+		//			make.width.equalTo(100)
+		//		}
 	}
 	
 	private func setBinding() {
@@ -243,6 +252,15 @@ class MainViewController: UIViewController {
 				}
 			}).disposed(by: self.disposeBag)
 		
+		self.viewModel.books
+			.observe(on: MainScheduler.instance)
+			.subscribe(onNext: { [weak self] books in
+				guard let self = self else { return }
+				
+				self.bookViewController.viewModel.bookTable.accept(books)
+				
+			}).disposed(by: disposeBag)
+		
 		self.viewModel.correctWords
 			.throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] words in
@@ -251,33 +269,19 @@ class MainViewController: UIViewController {
 				self.correctText = correctText
 			}).disposed(by: self.disposeBag)
 		
-		self.viewModel.naverBooks
-			.observe(on: MainScheduler.instance)
-			.subscribe(onNext: { [weak self] books in
-				guard let self = self else { return }
-				self.pageViewController.naverViewController.viewModel.naverTable.accept(books)
-			}).disposed(by: disposeBag)
-		
 		self.viewModel.naverTotal
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] total in
 				guard let self = self else { return }
-				self.pageViewController.naverViewController.viewModel.total.accept(total)
+				self.bookViewController.viewModel.naverTotal.accept(total)
 				print("Naver Total : \(total)")
-			}).disposed(by: disposeBag)
-		
-		self.viewModel.kakaoBooks
-			.observe(on: MainScheduler.instance)
-			.subscribe(onNext: { [weak self] books in
-				guard let self = self else { return }
-				self.pageViewController.kakaoViewController.viewModel.kakaoTable.accept(books)
 			}).disposed(by: disposeBag)
 		
 		self.viewModel.kakaoTotal
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] total in
 				guard let self = self else { return }
-				self.pageViewController.kakaoViewController.viewModel.total.accept(total)
+				self.bookViewController.viewModel.kakaoTotal.accept(total)
 				print("Kakao Total : \(total)")
 			}).disposed(by: disposeBag)
 		
@@ -285,36 +289,36 @@ class MainViewController: UIViewController {
 			.observe(on: MainScheduler.instance)
 			.subscribe(onNext: { [weak self] isEnd in
 				guard let self = self else { return }
-				self.pageViewController.kakaoViewController.viewModel.isEnd.accept(isEnd)
+				self.bookViewController.viewModel.kakaoIsEnd.accept(isEnd)
 			}).disposed(by: disposeBag)
 		
-		self.naverTab.rx.tap.bind { [weak self] _ in
-			guard let self = self else { return }
-			if self.pageViewController.viewModel.currentTable.value == "kakao" {
-				self.pageViewController.goToPreviousPage()
-			}
-			self.pageViewController.viewModel.currentTable.accept("naver")
-			
-		}.disposed(by: disposeBag)
-		
-		self.kakaoTab.rx.tap.bind { [weak self] _ in
-			guard let self = self else { return }
-			if self.pageViewController.viewModel.currentTable.value == "naver" {
-				self.pageViewController.goToNextPage()
-			}
-			self.pageViewController.viewModel.currentTable.accept("kakao")
-			
-		}.disposed(by: disposeBag)
+		//		self.naverTab.rx.tap.bind { [weak self] _ in
+		//			guard let self = self else { return }
+		//			if self.pageViewController.viewModel.currentTable.value == "kakao" {
+		//				self.pageViewController.goToPreviousPage()
+		//			}
+		//			self.pageViewController.viewModel.currentTable.accept("naver")
+		//
+		//		}.disposed(by: disposeBag)
+		//
+		//		self.kakaoTab.rx.tap.bind { [weak self] _ in
+		//			guard let self = self else { return }
+		//			if self.pageViewController.viewModel.currentTable.value == "naver" {
+		//				self.pageViewController.goToNextPage()
+		//			}
+		//			self.pageViewController.viewModel.currentTable.accept("kakao")
+		//
+		//		}.disposed(by: disposeBag)
 	}
 	
 	private func searchProcess() {
+		indicator.startAnimating()
 		// 결과 초기화
 		self.searchBar.endEditing(true)
 		isAdult = false
 		correctText = ""
 		
-		self.viewModel.naverBooks.accept([])
-		self.viewModel.kakaoBooks.accept([])
+		self.viewModel.books.accept([])
 		while searchBar.text?.last == " " {
 			searchBar.text?.removeLast()
 		}
@@ -328,33 +332,32 @@ class MainViewController: UIViewController {
 				self.viewModel.requestAdult(query: text)
 				if isAdult {
 					self.showToast(message: "성인 단어 포함")
+					indicator.stopAnimating()
 				} else {
 					// 오타 확인
 					self.viewModel.requestErrata(query: text)
 					
 					// 책 검색
-					self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
-					self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+					self.viewModel.requestBookInfo(query: correctText.isEmpty ? text : correctText)
+					
 					
 					// UserDefaults에 저장
 					correctText.isEmpty ? viewModel.saveSearchText(searchText: text) : viewModel.saveSearchText(searchText: correctText)
 					
-					correctText.isEmpty ? pageViewController.naverViewController.viewModel.searchText.accept(text) : pageViewController.naverViewController.viewModel.searchText.accept(correctText)
-					correctText.isEmpty ? pageViewController.kakaoViewController.viewModel.searchText.accept(text) : pageViewController.kakaoViewController.viewModel.searchText.accept(correctText)
+					correctText.isEmpty ? bookViewController.viewModel.searchText.accept(text) : bookViewController.viewModel.searchText.accept(correctText)
 					print(UserDefaults.standard.array(forKey: "searchText")!)
+					indicator.stopAnimating()
 				}
 			} else {
 				self.viewModel.requestErrata(query: text)
-				self.viewModel.requestNaverBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
-				self.viewModel.requestKakaoBookInfo(query: correctText.isEmpty ? text : correctText, page: 1)
+				self.viewModel.requestBookInfo(query: correctText.isEmpty ? text : correctText)
 				
 				// UserDefaults에 저장
 				correctText.isEmpty ? viewModel.saveSearchText(searchText: text) : viewModel.saveSearchText(searchText: correctText)
 				
-				correctText.isEmpty ? pageViewController.naverViewController.viewModel.searchText.accept(text) : pageViewController.naverViewController.viewModel.searchText.accept(correctText)
-				correctText.isEmpty ? pageViewController.kakaoViewController.viewModel.searchText.accept(text) : pageViewController.kakaoViewController.viewModel.searchText.accept(correctText)
+				correctText.isEmpty ? bookViewController.viewModel.searchText.accept(text) : bookViewController.viewModel.searchText.accept(correctText)
 				print(UserDefaults.standard.array(forKey: "searchText")!)
-				
+				indicator.stopAnimating()
 			}
 		} else {
 			self.showToast(message: "검색어를 입력해주세요")
@@ -407,9 +410,12 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		self.searchBar.text = searchTextList[indexPath.row]
-		self.searchProcess()
+		DispatchQueue.main.async {
+			self.searchTable.isHidden = true
+		}
+		
 		self.searchBar.endEditing(true)
-		self.searchTable.isHidden = true
+		self.searchProcess()
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
