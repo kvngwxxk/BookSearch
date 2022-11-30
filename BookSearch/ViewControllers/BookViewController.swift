@@ -23,10 +23,12 @@ class BookViewController: UIViewController {
 		super.viewDidLoad()
 		setAutoLayout()
 		setBinding()
-		table.registerCell(cellType: PageViewCell.self, reuseIdentifier: "PageViewCell")
+		table.registerCell(cellType: BookViewCell.self, reuseIdentifier: "BookViewCell")
 		table.dataSource = self
 		table.delegate = self
 		table.backgroundColor = .systemGray5
+		table.layer.borderColor = UIColor.systemGray5.cgColor
+		table.layer.borderWidth = 0.5
 		// Do any additional setup after loading the view.
 	}
 	
@@ -65,6 +67,7 @@ class BookViewController: UIViewController {
 					self.data.append(contentsOf: Array(self.bookList[0..<(self.bookList.count < 20 ? self.bookList.count : 20)]))
 				}
 				
+
 				self.table.reloadData()
 			}.disposed(by: disposeBag)
 		
@@ -83,7 +86,7 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell: PageViewCell = tableView.dequeueCell(reuseIdentifier: "PageViewCell", indexPath: indexPath)
+		let cell: BookViewCell = tableView.dequeueCell(reuseIdentifier: "BookViewCell", indexPath: indexPath)
 		var date = Date()
 		var stringDate = ""
 		if data.isEmpty {

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-class PageViewCell: UITableViewCell {
+class BookViewCell: UITableViewCell {
 	let idLabel: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false

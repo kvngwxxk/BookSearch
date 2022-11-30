@@ -4,10 +4,10 @@
 <dict>
 	<key>KakaoApiKey</key>
 	<string>1a78c80b7a2b333fb85049f3e0248974</string>
-	<key>NaverClientSecret</key>
-	<string>CaGq2I5dSy</string>
 	<key>NaverClientId</key>
 	<string>SWSpEc4SlHeU8qfr9dOM</string>
+	<key>NaverClientSecret</key>
+	<string>CaGq2I5dSy</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

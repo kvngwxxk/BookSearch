@@ -59,7 +59,7 @@ class DetailViewCell: UITableViewCell {
 			make.bottom.equalTo(containerView)
 		}
 		valueLabel.snp.makeConstraints { make in
-			make.trailing.equalTo(containerView).offset(10)
+			make.trailing.equalTo(containerView).offset(-10)
 			make.leading.equalTo(keyLabel.snp.trailing)
 			make.top.equalTo(containerView)
 			make.bottom.equalTo(containerView)

@@ -27,7 +27,7 @@
 		0898F413292755D100C3633D /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F412292755D100C3633D /* ApiManager.swift */; };
 		0898F4152927577D00C3633D /* Adult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F4142927577D00C3633D /* Adult.swift */; };
 		0898F41829275D6700C3633D /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F41729275D6700C3633D /* DetailViewModel.swift */; };
-		0898F41D292767CE00C3633D /* PageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F41C292767CE00C3633D /* PageViewCell.swift */; };
+		0898F41D292767CE00C3633D /* BookViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F41C292767CE00C3633D /* BookViewCell.swift */; };
 		0898F42229277BC500C3633D /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898F42129277BC500C3633D /* UITableView+Extension.swift */; };
 		08E5368F292C5072003FABF6 /* Errata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E5368E292C5072003FABF6 /* Errata.swift */; };
 		08E53697292CAFAF003FABF6 /* KakaoMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E53696292CAFAF003FABF6 /* KakaoMeta.swift */; };
@@ -83,7 +83,7 @@
 		0898F412292755D100C3633D /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
 		0898F4142927577D00C3633D /* Adult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adult.swift; sourceTree = "<group>"; };
 		0898F41729275D6700C3633D /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
-		0898F41C292767CE00C3633D /* PageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewCell.swift; sourceTree = "<group>"; };
+		0898F41C292767CE00C3633D /* BookViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewCell.swift; sourceTree = "<group>"; };
 		0898F42129277BC500C3633D /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		08E5368E292C5072003FABF6 /* Errata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errata.swift; sourceTree = "<group>"; };
 		08E53696292CAFAF003FABF6 /* KakaoMeta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoMeta.swift; sourceTree = "<group>"; };
@@ -261,7 +261,7 @@
 		0898F4192927626000C3633D /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
-				0898F41C292767CE00C3633D /* PageViewCell.swift */,
+				0898F41C292767CE00C3633D /* BookViewCell.swift */,
 				088CF530292DE0310047E963 /* DetailViewCell.swift */,
 			);
 			path = CustomCell;
@@ -548,7 +548,7 @@
 				0898F3DB292722AC00C3633D /* MainViewController.swift in Sources */,
 				0898F3D7292722AC00C3633D /* AppDelegate.swift in Sources */,
 				0898F41829275D6700C3633D /* DetailViewModel.swift in Sources */,
-				0898F41D292767CE00C3633D /* PageViewCell.swift in Sources */,
+				0898F41D292767CE00C3633D /* BookViewCell.swift in Sources */,
 				0898F413292755D100C3633D /* ApiManager.swift in Sources */,
 				08E53697292CAFAF003FABF6 /* KakaoMeta.swift in Sources */,
 				0898F40D2927482F00C3633D /* DetailViewController.swift in Sources */,

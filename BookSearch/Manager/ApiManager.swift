@@ -66,7 +66,7 @@ class ApiManager {
 					case 500:
 						print(response.error?.errorDescription ?? "")
 					default:
-						print(response.response?.statusCode)
+						print(response.response?.statusCode ?? 999)
 					}
 					
 					observer.onCompleted()
@@ -135,7 +135,7 @@ class ApiManager {
 					case 500:
 						print(response.error?.errorDescription ?? "")
 					default:
-						print(response.response?.statusCode)
+						print(response.response?.statusCode ?? 999)
 					}
 				}
 			CFRunLoopRun()
@@ -185,13 +185,13 @@ class ApiManager {
 				case 400:
 					print(response.error ?? "")
 				case 401:
-					print(String(data: response.value!, encoding: .utf8))
+					print(String(data: response.value!, encoding: .utf8)!)
 				case 404:
 					print(response.error?.errorDescription ?? "")
 				case 500:
 					print(response.error?.errorDescription ?? "")
 				default:
-					print(response.response?.statusCode)
+					print(response.response?.statusCode ?? 999)
 				}
 				
 			}
@@ -344,7 +344,7 @@ class ApiManager {
 					case 500:
 						print(response.error?.errorDescription ?? "")
 					default:
-						print(response.response?.statusCode)
+						print(response.response?.statusCode ?? 999)
 					}
 				}
 			CFRunLoopRun()

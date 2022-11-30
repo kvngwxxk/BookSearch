@@ -26,7 +26,6 @@ class UserDefaultsManager {
 	
 	func saveSearchText(searchText: String) -> [String] {
 		if var searchTextList = (userDefaults.array(forKey: "searchText") ?? [String]()) as? [String] {
-			// temp : 10개
 			if searchTextList.count > 100 {
 				searchTextList.removeLast()
 				searchTextList.insert(searchText, at: 0)

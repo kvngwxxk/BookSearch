@@ -209,6 +209,7 @@ class MainViewController: UIViewController {
 				guard let self = self else { return }
 				self.searchTable.isHidden = false
 				print(newText)
+				
 				self.viewModel.searchTextList.subscribe(onNext: { list in
 					self.searchTextList = list.filter{ $0.hasPrefix(newText)}
 					if !newText.isEmpty {
@@ -228,11 +229,18 @@ class MainViewController: UIViewController {
 						self.searchTable.reloadData()
 					}
 					
-					print(self.searchTable.contentSize.height)
 				}).disposed(by: self.disposeBag)
 				
 			}.disposed(by: disposeBag)
-		
+		self.searchBar.rx.controlEvent([.editingDidEndOnExit]).bind { _ in
+			DispatchQueue.main.async {
+				self.searchBar.endEditing(true)
+				self.searchTable.isHidden = true
+				
+			}
+			self.searchProcess()
+			
+		}.disposed(by: disposeBag)
 		self.checkAdult.rx.tap.bind { [weak self] _ in
 			guard let self = self else { return }
 			if self.isChecked {
@@ -366,7 +374,7 @@ class MainViewController: UIViewController {
 					correctText.isEmpty ? viewModel.saveSearchText(searchText: text) : viewModel.saveSearchText(searchText: correctText)
 					
 					correctText.isEmpty ? bookViewController.viewModel.searchText.accept(text) : bookViewController.viewModel.searchText.accept(correctText)
-					print(UserDefaults.standard.array(forKey: "searchText")!)
+					print(UserDefaults.standard.array(forKey: "searchText")!.count)
 					DispatchQueue.main.async {
 						self.indicator.stopAnimating()
 					}
@@ -428,8 +436,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell: UITableViewCell = tableView.dequeueCell(reuseIdentifier: "MainCell", indexPath: indexPath)
-		cell.textLabel?.text = searchTextList[indexPath.row]
-		return cell
+		if searchTextList.isEmpty {
+			return cell
+		} else {
+			cell.textLabel?.text = searchTextList[indexPath.row]
+			return cell
+		}
+		
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -458,4 +471,9 @@ extension MainViewController: UIGestureRecognizerDelegate {
 	}
 }
 
-
+extension MainViewController: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		searchProcess()
+		return true
+	}
+}
