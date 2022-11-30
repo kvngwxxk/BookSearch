@@ -44,6 +44,10 @@ class BookViewController: UIViewController {
 		table.snp.makeConstraints { make in
 			make.width.equalTo(self.view.safeAreaLayoutGuide.snp.width)
 			make.height.equalTo(self.view.safeAreaLayoutGuide.snp.height)
+			make.top.equalTo(self.view.safeAreaLayoutGuide)
+			make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+			make.leading.equalTo(self.view.safeAreaLayoutGuide)
+			make.trailing.equalTo(self.view.safeAreaLayoutGuide)
 		}
 	}
 	

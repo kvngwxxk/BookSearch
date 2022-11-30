@@ -21,5 +21,4 @@ struct Book: Codable {
 	var price: Int
 	var status: String
 	var dataSource: String
-	var duplicated = false
 }

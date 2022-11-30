@@ -37,31 +37,37 @@ class BookViewModel {
 			print(newBook!)
 			mashUpBooks.append(newBook!)
 		}
-		let new = removeDuplicatedBooks(book: mashUpBooks)
+		let new = removeDuplicatedBooks(books: mashUpBooks)
 		bookTable.accept(new)
 		self.naverTotal.accept(naverTotal)
 		self.kakaoTotal.accept(kakaoTotal)
 	}
 	
-	func removeDuplicatedBooks(book: [Book]) -> [Book]  {
-		var bookList = book
-		for i in 0..<book.count {
-			var isbn = book[i].isbn
-			if isbn.contains(" ") {
-				isbn = book[i].isbn.components(separatedBy: " ").last ?? ""
+	func removeDuplicatedBooks(books: [Book]) -> [Book]  {
+		var newBooks = [Book]()
+		let isbnArr = books.map{ book -> String in
+			var isbn = ""
+			if book.isbn.contains(" ") {
+				isbn = book.isbn.components(separatedBy: " ").last ?? ""
+			} else {
+				isbn = book.isbn
 			}
-			for j in 0..<book.count {
-				if i == j {
-					continue
-				} else {
-					if book[j].isbn.contains(isbn){
-						bookList[j].duplicated = true
-					}
+			return isbn
+		}
+		
+		let dup = Array(Set(isbnArr))
+		
+		for i in 0..<dup.count {
+			for j in 0..<books.count {
+				if books[j].isbn.contains(dup[i]) {
+					newBooks.append(books[j])
+					break
 				}
 			}
 		}
-		return bookList.filter{$0.duplicated == false}
+		return newBooks
 	}
+	
 	private func convertBook(naverBook: NaverBook? = nil, kakaoBook: KakaoBook? = nil) -> Book? {
 		if let naverBook = naverBook {
 			let title = naverBook.title.isEmpty ? "제목 없음" : naverBook.title
