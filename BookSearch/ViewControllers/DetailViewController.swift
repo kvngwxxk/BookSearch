@@ -11,7 +11,10 @@ import SnapKit
 import RxSwift
 class DetailViewController: UIViewController {
 	let book: Book
+	let viewModel: DetailViewModel
 	let disposeBag = DisposeBag()
+	var bottomKeyData: [String] = []
+	var bottomValueData: [String] = []
 	let closeButton: UIButton = {
 		let btn = UIButton(type: .close)
 		btn.translatesAutoresizingMaskIntoConstraints = false
@@ -46,9 +49,7 @@ class DetailViewController: UIViewController {
 		return label
 	}()
 	
-	var topData = [String: String]()
-	var bottomKeyData = [String]()
-	var bottomValueData = [String]()
+	
 	var tableView = UITableView()
 	
 	override func viewDidLoad() {
@@ -60,14 +61,14 @@ class DetailViewController: UIViewController {
 		tableView.rowHeight = UITableView.automaticDimension
 		tableView.estimatedRowHeight = 200
 		closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
-		setAutoLayout()
 		setData()
-		setThumbnail()
-		setLabels()
+		setAutoLayout()
+		setBinding()
 	}
 	
-	init(book: Book) {
+	init(viewModel: DetailViewModel, book: Book) {
 		self.book = book
+		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -76,72 +77,44 @@ class DetailViewController: UIViewController {
 	}
 	
 	private func setData() {
-		let image = book.image
-		let title = book.title
-		let authors = book.authors.joined(separator: ", ")
-		let publisher = book.publisher
-		topData.updateValue(image, forKey: "image")
-		topData.updateValue(title, forKey: "title")
-		topData.updateValue(authors, forKey: "authors")
-		topData.updateValue(publisher, forKey: "publisher")
+		viewModel.setData(book: book)
 		
-		
-		// 하단 항목
-		bottomKeyData.append("description")
-		bottomKeyData.append("publishDate")
-		bottomKeyData.append("isbn")
-		bottomKeyData.append("price")
-		bottomKeyData.append("sale_price")
-		bottomKeyData.append("status")
-		bottomKeyData.append("translators")
-		bottomKeyData.append("url")
-		
-		let description = book.description
-		let dateTime = book.publishDate
-		let isbn = book.isbn
-		let price = String(book.price)
-		let salePrice = String(book.salePrice)
-		let status = book.status
-		let translators = book.translators.joined(separator: ", ")
-		let url = book.url
-		bottomValueData.append(description)
-		bottomValueData.append(dateTime)
-		bottomValueData.append(isbn)
-		bottomValueData.append(price)
-		bottomValueData.append(salePrice)
-		bottomValueData.append(status)
-		bottomValueData.append(translators)
-		bottomValueData.append(url)
 	}
-	private func setThumbnail() {
-		if let imgUrl = topData["image"] {
-			if let url = URL(string: imgUrl) {
-				thumbnail.rx.tap.bind {
-					if UIApplication.shared.canOpenURL(url) {
-						UIApplication.shared.open(url, options: [:], completionHandler: nil)
+	private func setThumbnail(dic: Dictionary<String, String>) {
+		DispatchQueue.main.async {
+			if let imgUrl = dic["image"] {
+				if let url = URL(string: imgUrl) {
+					thumbnail.rx.tap.bind {
+						if UIApplication.shared.canOpenURL(url) {
+							UIApplication.shared.open(url, options: [:], completionHandler: nil)
+						}
+					}.disposed(by: disposeBag)
+					let data = try? Data(contentsOf: url)
+					if let data = data {
+						thumbnail.setImage(UIImage(data: data), for: .normal)
+					} else {
+						print("data is nil")
 					}
-				}.disposed(by: disposeBag)
-				let data = try? Data(contentsOf: url)
-				if let data = data {
-					thumbnail.setImage(UIImage(data: data), for: .normal)
-				} else {
-					print("data is nil")
 				}
+			} else {
+				print("img url is nil")
 			}
-		} else {
-			print("img url is nil")
+			thumbnail.layer.borderColor = UIColor.black.cgColor
+			thumbnail.layer.borderWidth = 0.5
 		}
-		thumbnail.layer.borderColor = UIColor.black.cgColor
-		thumbnail.layer.borderWidth = 0.5
 	}
-	private func setLabels() {
-		let title = topData["title"]
-		let author = topData["authors"]!
-		let publisher = topData["publisher"]!
+	private func setLabels(dic: Dictionary<String, String>) {
+		let title = dic["title"]
+		let author = dic["authors"]!
+		let publisher = dic["publisher"]!
 		
-		titleLabel.text = title
-		authorLabel.text = "저자 : \(author)"
-		publisherLabel.text = "출판사 : \(publisher)"
+		DispatchQueue.main.async {
+			titleLabel.text = title
+			authorLabel.text = "저자 : \(author)"
+			publisherLabel.text = "출판사 : \(publisher)"
+		}
+		
+		
 	}
 	private func setAutoLayout() {
 		self.view.addSubview(tableView)
@@ -198,6 +171,31 @@ class DetailViewController: UIViewController {
 		}
 	}
 	
+	private func setBinding() {
+		viewModel.topData.bind { [weak self] dic in
+			guard let self = self else { return }
+			DispatchQueue.main.async {
+				self.setThumbnail(dic: dic)
+				self.setLabels(dic: dic)
+			}
+		}.disposed(by: disposeBag)
+		
+		viewModel.bottomKeyData.bind { [weak self] arr in
+			guard let self = self else { return }
+			DispatchQueue.main.async {
+				self.bottomKeyData = arr
+				self.tableView.reloadData()
+			}
+		}.disposed(by: disposeBag)
+		
+		viewModel.bottomValueData.bind { [weak self] arr in
+			guard let self = self else { return }
+			DispatchQueue.main.async {
+				self.bottomValueData = arr
+				self.tableView.reloadData()
+			}
+		}.disposed(by: disposeBag)
+	}
 	// Button Event
 	@objc func closeView() {
 		self.presentingViewController?.dismiss(animated: true, completion: nil)

@@ -135,7 +135,7 @@ extension BookViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.present(DetailViewController(book: data[indexPath.row]), animated: true, completion: nil)
+		self.present(DetailViewController(viewModel: DetailViewModel(), book: data[indexPath.row]), animated: true, completion: nil)
 		print(indexPath.row)
 	}
 	
