@@ -113,8 +113,6 @@ class DetailViewController: UIViewController {
 			self.authorLabel.text = "저자 : \(author)"
 			self.publisherLabel.text = "출판사 : \(publisher)"
 		}
-		
-		
 	}
 	private func setAutoLayout() {
 		self.view.addSubview(tableView)
