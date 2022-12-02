@@ -84,14 +84,14 @@ class DetailViewController: UIViewController {
 		DispatchQueue.main.async {
 			if let imgUrl = dic["image"] {
 				if let url = URL(string: imgUrl) {
-					thumbnail.rx.tap.bind {
+					self.thumbnail.rx.tap.bind {
 						if UIApplication.shared.canOpenURL(url) {
 							UIApplication.shared.open(url, options: [:], completionHandler: nil)
 						}
-					}.disposed(by: disposeBag)
+					}.disposed(by: self.disposeBag)
 					let data = try? Data(contentsOf: url)
 					if let data = data {
-						thumbnail.setImage(UIImage(data: data), for: .normal)
+						self.thumbnail.setImage(UIImage(data: data), for: .normal)
 					} else {
 						print("data is nil")
 					}
@@ -99,8 +99,8 @@ class DetailViewController: UIViewController {
 			} else {
 				print("img url is nil")
 			}
-			thumbnail.layer.borderColor = UIColor.black.cgColor
-			thumbnail.layer.borderWidth = 0.5
+			self.thumbnail.layer.borderColor = UIColor.black.cgColor
+			self.thumbnail.layer.borderWidth = 0.5
 		}
 	}
 	private func setLabels(dic: Dictionary<String, String>) {
@@ -109,9 +109,9 @@ class DetailViewController: UIViewController {
 		let publisher = dic["publisher"]!
 		
 		DispatchQueue.main.async {
-			titleLabel.text = title
-			authorLabel.text = "저자 : \(author)"
-			publisherLabel.text = "출판사 : \(publisher)"
+			self.titleLabel.text = title
+			self.authorLabel.text = "저자 : \(author)"
+			self.publisherLabel.text = "출판사 : \(publisher)"
 		}
 		
 		
